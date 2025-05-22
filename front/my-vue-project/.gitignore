@@ -1,0 +1,60 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.tsbuildinfo
+
+# Created by https://www.toptal.com/developers/gitignore/api/vue
+# Edit at https://www.toptal.com/developers/gitignore?templates=vue
+
+### Vue ###
+# gitignore template for Vue.js projects
+#
+# Recommended template: Node.gitignore
+
+# TODO: where does this rule come from?
+docs/_book
+
+# TODO: where does this rule come from?
+test/
+
+# End of https://www.toptal.com/developers/gitignore/api/vue
+
+
+# node_modules 폴더 무시
+node_modules/
+
+# 환경 설정 파일 무시
+.env
+
+# 빌드 결과물 무시
+dist/
+
+# 기타 OS 또는 IDE 관련 파일 무시
+.DS_Store
+.vscode/
