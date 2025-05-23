@@ -29,19 +29,20 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import MovieModal from '@/components/RecommendeModal.vue'; // MovieModal 컴포넌트 import (경로 확인)
+import MovieModal from '@/components/RecommendeModal.vue';
 
 const currentWeather = ref('');
 const recommendedMovies = ref([]);
 const error = ref('');
 
-// 모달 관련 상태
 const showModal = ref(false);
 const selectedVideoId = ref('');
 const selectedVideoTitle = ref('');
 
 const weatherApiKey = import.meta.env.VITE_WEATHER_API_KEY;
 const youtubeApiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
+const openaiApiKey = import.meta.env.VITE_OPENAI_API_KEY;
+
 const latitude = 35.1595454;
 const longitude = 126.8526012;
 const numberOfMoviesToFetch = 15;
@@ -50,38 +51,65 @@ async function fetchWeather() {
   try {
     const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${weatherApiKey}&lang=kr&units=metric`;
     const response = await fetch(weatherApiUrl);
-    if (!response.ok) {
-      throw new Error(`날씨 정보를 가져오는데 실패했습니다: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`날씨 정보를 가져오는데 실패했습니다: ${response.status}`);
+
     const weatherData = await response.json();
-    currentWeather.value = `${weatherData.weather[0].description}, 온도: ${weatherData.main.temp}°C`;
-    fetchMoviesFromYoutube(weatherData.weather[0].main);
+    const weatherDescription = weatherData.weather[0].description;
+    const weatherCondition = weatherData.weather[0].main;
+
+    currentWeather.value = `${weatherDescription}, 온도: ${weatherData.main.temp}°C`;
+
+    const searchKeyword = await getRecommendationFromOpenAI(weatherDescription);
+    await fetchMoviesFromYoutube(searchKeyword);
   } catch (err) {
     error.value = err.message;
     console.error('날씨 정보 에러:', err);
   }
 }
 
-async function fetchMoviesFromYoutube(weatherCondition)  {
+async function getRecommendationFromOpenAI(weatherDescription) {
   try {
-    let searchQuery = '';
-    if (weatherCondition === 'Clear') {
-      searchQuery = '신나는 코미디 영화';
-    } else if (weatherCondition === 'Rain' || weatherCondition === 'Drizzle' || weatherCondition === 'Thunderstorm') {
-      searchQuery = '감성적인 드라마 영화';
-    } else if (weatherCondition === 'Snow') {
-      searchQuery = '따뜻한 판타지 영화';
-    } else if (weatherCondition === 'Clouds') {
-      searchQuery = '흥미진진한 스릴러 영화';
-    } else {
-      searchQuery = '추천 영화';
-    }
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${openaiApiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: '당신은 사용자의 날씨 상황에 따라 영화 추천 키워드를 생성하는 영화 추천 전문가이자,평론가야',
+          },
+          {
+            role: 'user',
+            content: `오늘 날씨는 '${weatherDescription}'인데, 어떤 분위기의 영화를 추천해?예고편 위주로 말해줘 장르는(드라마와 영화만) (3~5글자 정도의 한국어 키워드 하나만 자연스럽게 답변해줘. 예: 감성 드라마, 흥미 스릴러, 따뜻한 가족영화)`,
+          },
+        ],
+        temperature: 0.8,
+        max_tokens: 30,
+      }),
+    });
 
-    const youtubeApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=${numberOfMoviesToFetch}&q=${searchQuery}&type=video&key=${youtubeApiKey}`;
+    if (!response.ok) throw new Error(`OpenAI 응답 실패: ${response.status}`);
+
+    const data = await response.json();
+    const reply = data.choices[0].message.content.trim();
+    return reply;
+  } catch (err) {
+    error.value = `OpenAI 에러: ${err.message}`;
+    console.error('OpenAI API 에러:', err);
+    return '추천 영화';
+  }
+}
+
+async function fetchMoviesFromYoutube(searchQuery) {
+  try {
+    const youtubeApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=${numberOfMoviesToFetch}&q=${encodeURIComponent(searchQuery)}&type=video&key=${youtubeApiKey}`;
     const response = await fetch(youtubeApiUrl);
-    if (!response.ok) {
-      throw new Error(`YouTube 영화 정보를 가져오는데 실패했습니다: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`YouTube 영화 정보를 가져오는데 실패했습니다: ${response.status}`);
+
     const youtubeData = await response.json();
     recommendedMovies.value = youtubeData.items.map(item => ({
       title: item.snippet.title,
@@ -112,11 +140,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 전체 배경 */
 div {
-  background-color: #f4f4f4; /* 밝은 회색 배경 */
+  background-color: #f4f4f4;
   padding: 20px;
-  font-family: 'Noto Sans KR', sans-serif; /* 예시 폰트 */
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 h2 {
@@ -137,91 +164,31 @@ p {
   align-items: center;
   margin-bottom: 15px;
   background-color: #fff;
-  padding: 15px; /* 패딩 증가 */
-  border-radius: 10px; /* 좀 더 둥근 모서리 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 그림자 강조 */
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .movie-item:hover {
-  transform: translateY(-5px); /* 호버 시 더 많이 떠오르는 효과 */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 더 강조 */
-  cursor: pointer; /* 마우스 커서 변경 */
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 .movie-item img {
-  width: 150px; /* 이미지 크기 약간 확대 */
+  width: 150px;
   height: auto;
   margin-right: 20px;
   border-radius: 8px;
-  object-fit: cover; /* 이미지가 비율에 맞춰 잘리지 않도록 */
+  object-fit: cover;
 }
 
 .movie-item p {
   margin: 0;
-  font-size: 1.1rem; /* 글자 크기 약간 확대 */
-  font-weight: 500; /* 중간 정도 굵기로 변경 */
-  color: #333;
-}
-
-.movie-item p {
-  margin: 0;
-  cursor: pointer;
+  font-size: 1.1rem;
   font-weight: bold;
   color: #333;
-}
-
-/* 모달 스타일 (RecommendeModal.vue에 적용) */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정 배경 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
-
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-
-.modal-close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.5rem;
   cursor: pointer;
-  border: none;
-  background: none;
-  color: #777;
-}
-
-.modal-close-button:hover {
-  color: #333;
-}
-
-.modal-video-container {
-  width: 80vw; /* 적절한 너비 조정 */
-  max-width: 600px;
-  aspect-ratio: 16 / 9; /* 유튜브 영상 비율 */
-}
-
-.modal-video-container iframe {
-  width: 100%;
-  height: 100%;
-}
-
-.modal-title {
-  margin-top: 15px;
-  text-align: center;
-  color: #333;
 }
 </style>
