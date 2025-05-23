@@ -5,6 +5,7 @@
       <p>가입번호 : {{ user.id }}</p>
       <p>ID : {{ user.username }}</p>
       <p>Email : {{ user.email }}</p>
+      <p>팔로워 : {{ followers }} | 팔로잉 : {{ followings }}</p>
       <button @click="onFollow(user.id)">
         {{ isFollowed ? '언팔로우' : '팔로우' }}
       </button>
@@ -22,7 +23,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useOtherProfileStore } from '@/stores/otherprofile.js'
 import { useRoute } from 'vue-router'
 import ProfileMovie from '@/components/ProfileMovie.vue'
@@ -35,6 +36,8 @@ const user = store.user
 const route = useRoute()
 const userId = route.params.userid
 const userstore = useUserStore()
+const followers = computed(() => store.followers)
+const followings = computed(() => store.followings)
 
 const isFollowed = ref(false)
 
@@ -65,6 +68,7 @@ const onFollow = function (pk) {
     .then(res => {
       console.log('팔로우 토글 성공', res.data)
       isFollowed.value = res.data.followed
+      window.location.reload()
     })
     .catch(err => {
       console.error('에러', err.response)

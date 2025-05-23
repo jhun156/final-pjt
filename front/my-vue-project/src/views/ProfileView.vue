@@ -5,6 +5,7 @@
       <p>가입번호 : {{ user.id }}</p>
       <p>ID : {{ user.username }}</p>
       <p>Email : {{ user.email }}</p>
+      <p>팔로워 : {{ followers }} | 팔로잉 : {{ followings }}</p>
     </div>
     <div class="row">
       <div
@@ -27,10 +28,11 @@
   const profileStore = useProfileStore()
   const movies = computed(() => profileStore.movies)
   const user = computed(() => profileStore.user)
+  const followers = computed(() => profileStore.followers)
+  const followings = computed(() => profileStore.followings)
 
   onMounted(() => {
     profileStore.userInfo()
-    profileStore.movieList()
   })
   
 </script>
