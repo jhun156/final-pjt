@@ -54,6 +54,7 @@ export const useUserStore = defineStore('user', () => {
   const logout = function () {
     token.value = ''
     localStorage.removeItem('token')
+    isLogin.value=!isLogin.value
     console.log('로그아웃 완료')
   }
 
@@ -61,4 +62,4 @@ export const useUserStore = defineStore('user', () => {
     token, ACCOUNT_URL, isLogin,
     signUp, logIn, logout
   }
-})
+},{persist:true})

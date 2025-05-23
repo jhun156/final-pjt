@@ -54,6 +54,7 @@ const submitComment=function(){
       username: user.username
     }
   })
+  .then
 }
 
 const goOtherProfile = function (userId) {
