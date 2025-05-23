@@ -28,8 +28,9 @@ const router = useRouter()
 
 const onLogout=function(){
   store.logout()
-  window.alert('로그아웃되었습니다.')
   router.push({name:'home'})
+  window.location.reload();
+  
 }
 
 </script>
