@@ -13,6 +13,7 @@
       <div v-for="comment in filteredComments" :key="comment.id" class="comment">
         <p>{{ comment.subtitle }} : {{ comment.content }}</p>
         <small>작성자: {{ comment.username }}</small>
+        <button @click.prevent="goOtherProfile(comment.user)">프로필</button>
       </div>
     </div>
     <p v-else>아직 댓글이 없습니다.</p>
@@ -24,8 +25,10 @@ import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import { useUserStore } from '@/stores/auth'
 import { useProfileStore } from '@/stores/profile'
+import { useRouter } from 'vue-router'
 
 const profileStore=useProfileStore()
+const router = useRouter()
 
 const props = defineProps({
   movie: Object
@@ -51,6 +54,10 @@ const submitComment=function(){
       username: user.username
     }
   })
+}
+
+const goOtherProfile = function (userId) {
+  router.push({ name: 'otherprofile', params: { userid: userId } })
 }
 
 onMounted(() => {
