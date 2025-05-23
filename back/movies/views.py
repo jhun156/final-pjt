@@ -15,7 +15,7 @@ from rest_framework.authentication import TokenAuthentication
 @permission_classes([IsAuthenticated])
 def movie_list(request):
     if request.method == 'GET':
-        movies = get_list_or_404(Movie)
+        movies = get_list_or_404(Movie, user=request.user)
         serializer = MovieListSerializer(movies, many=True)
         return Response(serializer.data)
 

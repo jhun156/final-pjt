@@ -20,13 +20,13 @@
 
 
 <script setup>
-  import { onMounted } from 'vue'
+  import { onMounted, computed } from 'vue'
   import { useProfileStore } from '@/stores/profile.js'
   import ProfileMovie from '@/components/ProfileMovie.vue'
 
   const profileStore = useProfileStore()
-  const movies = profileStore.movies
-  const user = profileStore.user
+  const movies = computed(() => profileStore.movies)
+  const user = computed(() => profileStore.user)
 
   onMounted(() => {
     profileStore.userInfo()
