@@ -44,7 +44,7 @@ export const useOtherProfileStore = defineStore('otherprofile', () => {
   }
   
   return {
-    USERINFO_URL, movies, user,followers, followings,
+    USERINFO_URL, movies, user, followers, followings,
     userInfo
   }
 },{persist: true})
