@@ -40,6 +40,7 @@ const subtitle=ref('')
 const content=ref('')
 const user = profileStore.user
 
+
 const submitComment=function(){
   axios({
     method:'POST',

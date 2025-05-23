@@ -5,6 +5,10 @@
       <p>가입번호 : {{ user.id }}</p>
       <p>ID : {{ user.username }}</p>
       <p>Email : {{ user.email }}</p>
+      <button @click="onFollow(user.id)">
+        {{ isFollowed ? '언팔로우' : '팔로우' }}
+      </button>
+
     </div>
     <div class="row">
       <div
@@ -18,20 +22,59 @@
   </div>
 </template>
 <script setup>
-  import { onMounted } from 'vue'
-  import { useOtherProfileStore } from '@/stores/otherprofile.js'
-  import { useRoute } from 'vue-router'
-  import ProfileMovie from '@/components/ProfileMovie.vue'
+import { ref, onMounted } from 'vue'
+import { useOtherProfileStore } from '@/stores/otherprofile.js'
+import { useRoute } from 'vue-router'
+import ProfileMovie from '@/components/ProfileMovie.vue'
+import axios from 'axios'
+import { useUserStore } from '@/stores/auth'
 
-  const store = useOtherProfileStore()
-  const movies = store.movies
-  const user = store.user
-  const route = useRoute()
-  const userId = route.params.userid
+const store = useOtherProfileStore()
+const movies = store.movies
+const user = store.user
+const route = useRoute()
+const userId = route.params.userid
+const userstore = useUserStore()
 
-  onMounted(() => {
-    store.userInfo(userId)
+const isFollowed = ref(false)
+
+const fetchFollowStatus = () => {
+  axios({
+    method: 'get',
+    url: `http://localhost:8000/${userId}/follow/`,
+    headers: {
+      Authorization: `Token ${userstore.token}`
+    }
   })
+    .then(res => {
+      isFollowed.value = res.data.is_followed
+    })
+    .catch(err => {
+      console.error('팔로우 상태 조회 실패:', err.response)
+    })
+}
+
+const onFollow = function (pk) {
+  axios({
+    method: 'post',
+    url: `http://localhost:8000/${pk}/follow/`,
+    headers: {
+      Authorization: `Token ${userstore.token}`
+    }
+  })
+    .then(res => {
+      console.log('팔로우 토글 성공', res.data)
+      isFollowed.value = res.data.followed
+    })
+    .catch(err => {
+      console.error('에러', err.response)
+    })
+}
+
+onMounted(() => {
+  store.userInfo(userId)
+  fetchFollowStatus()
+})
 
 </script>
 
