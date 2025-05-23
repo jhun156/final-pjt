@@ -5,27 +5,13 @@ import { useUserStore } from './auth.js'
 
 export const useProfileStore = defineStore('profile', () => {
 
-  const PROFILE_URL = 'http://127.0.0.1:8000/movie/'
   const USERINFO_URL = 'http://127.0.0.1:8000/userinfo/'
+  const FOLLOW_URL = 'http://127.0.0.1:8000/'
   const movies = ref([])
   const user = ref({})
   const userStore = useUserStore()
-
-  const movieList = function () {
-    axios({
-      method: 'get',
-      url: `${PROFILE_URL}`,
-      headers: {
-        Authorization: `Token ${userStore.token}`
-      }
-    })
-      .then((res) => {
-        movies.value = res.data
-      })
-      .catch((err) => {
-        console.log(err.response.data)
-      })
-  }
+  const followers = ref('')
+  const followings = ref('')
 
   const userInfo = function () {
     axios({
@@ -36,15 +22,30 @@ export const useProfileStore = defineStore('profile', () => {
       }
     })
       .then((res) => {
-        user.value = res.data
+        user.value = res.data.user
+        movies.value = res.data.movies
+        console.log(res.data.user)
+
+        // followers / followings 정보 추가로 요청!
+        axios({
+          method: 'get',
+          url: `${FOLLOW_URL}${user.value.id}/follow/`,
+          headers: {
+            Authorization: `Token ${userStore.token}`
+          }
+        })
+          .then(res => {
+            followers.value = res.data.followers_count
+            followings.value = res.data.followings_count
+          })
+          .catch(err => console.log('Follow 정보 에러:', err))
       })
       .catch((err) => {
-        console.log(err)
+        console.log('UserInfo 에러:', err)
       })
   }
-  
   return {
-    PROFILE_URL, USERINFO_URL, movies, user,
-    movieList, userInfo
+    movies, user, followers, followings,
+    userInfo
   }
 },{persist:true})
