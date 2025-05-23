@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="sticky">
     <nav class="navbar">
       <RouterLink :to="{ name: 'home' }" class="logo-link">
         <img src="@/assets/ssafyLogo.png" alt="로고" class="logo-img" />
@@ -181,6 +181,12 @@ iframe {
   height: 390px;
   border: none;
   display: block;
+}
+
+.sticky {
+  position: sticky;
+  top: 0px;
+  z-index: 9999;
 }
 
 </style>
