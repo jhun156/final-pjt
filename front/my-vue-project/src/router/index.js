@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import {useUserStore} from '@/stores/auth.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +49,14 @@ const router = createRouter({
 
 export default router
 
-router.beforeEach((to,from)=>{
-  
-})
+router.beforeEach((to, from) => {
+  const store = useUserStore();
+
+  const publicPages = ['home', 'login', 'signup']; 
+
+  if (!store.isLogin && !publicPages.includes(to.name)) {
+    window.alert('로그인이 필요합니다');
+    return { name: 'login' };
+  }
+
+});

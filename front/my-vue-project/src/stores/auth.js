@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user', () => {
   const token = ref(storedToken || '')
 
   const ACCOUNT_URL = 'http://127.0.0.1:8000/accounts'
-  const isLogin = computed(() => !!token.value)
+  const isLogin = ref(false)
   const router = useRouter()
 
   const signUp=function(payload){
@@ -45,6 +45,7 @@ export const useUserStore = defineStore('user', () => {
       token.value = res.data.key
       localStorage.setItem('token', res.data.key)
       window.alert('로그인 성공')
+      isLogin.value=!isLogin.value
       router.push({ name: 'home' })
     })
     .catch(err => console.log(err))
