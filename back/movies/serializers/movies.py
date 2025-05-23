@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ..models import Movie, Comment
+from accounts.models import User
 
 # 전체 영화 목록
 class MovieListSerializer(serializers.ModelSerializer): 
@@ -20,3 +21,4 @@ class MovieSerializer(serializers.ModelSerializer):
         model = Movie
         fields = '__all__'
         read_only_fields = ('user',)  # user 필드를 read_only로 지정!
+

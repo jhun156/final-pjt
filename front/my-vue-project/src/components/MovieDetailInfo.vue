@@ -6,7 +6,8 @@
         alt="상세 이미지"
         class="movie-poster"
       />
-      <img src="@/assets/like.png" alt="좋아요 이미지" @click="onLike">
+      <img v-show="!is_like" src="@/assets/like.png" alt="좋아요 이미지" @click="onLC">
+      <img v-show="is_like" src="@/assets/ssafyLogo.png" alt="좋아요 이미지" @click="onLC">
     </div>
     <h3 class="text-center mb-3 text-primary fw-bold">{{ movie.title }} 상세 페이지</h3>
     <p class="text-center mb-1"><strong>개봉일:</strong> {{ movie.release_date }}</p>
@@ -48,7 +49,7 @@
 
 <script setup>
 import YoutubeTrailerModal from '@/components/YoutubeTrailerModal.vue'
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 import { useUserStore } from '@/stores/auth.js'
 import axios from 'axios'
 import Comments from '@/components/Comments.vue'
@@ -66,6 +67,31 @@ function openModal() {
 
 function closeModal() {
   isModalOpen.value = false
+}
+
+const is_like=ref(false)
+
+const onCheck=function(){
+  const store=useUserStore()
+  axios({
+    method:'get',
+    url:'http://localhost:8000/like_movie/',
+    headers: {
+      Authorization: `Token ${store.token}`
+    },
+  })
+  .then(res=>{
+    if(res.data.username!==store.username){
+      is_like.value=false
+    }
+    else if(res.data.username === store.username){
+      is_like.value=true
+    }
+    console.log(res.data)
+  })
+  .catch(err=>{
+    console.log(err)
+  })
 }
 
 const onLike=function(){
@@ -97,6 +123,14 @@ const onLike=function(){
     window.alert('이미 저장되어있습니다')
   })
 }
+
+const onLC=function(){
+  onLike()
+  onCheck()
+}
+onMounted(()=>{
+  onCheck()
+})
 </script>
 
 <style scoped>
