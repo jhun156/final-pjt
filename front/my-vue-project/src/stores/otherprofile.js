@@ -20,8 +20,8 @@ export const useOtherProfileStore = defineStore('profile', () => {
       }
     })
       .then((res) => {
-        user.value = res.data.user
-        movies.value = res.data.movies
+        user.value = { ...res.data.user }    // 새로운 객체로 덮어쓰기
+        movies.value = [...res.data.movies]  // 배열도 새 배열로 덮어쓰기
         console.log('데이터 로드 성공')
       })
       .catch((err) => {
@@ -33,4 +33,4 @@ export const useOtherProfileStore = defineStore('profile', () => {
     USERINFO_URL, movies, user,
     userInfo
   }
-},{persist:true})
+},{persist: true})

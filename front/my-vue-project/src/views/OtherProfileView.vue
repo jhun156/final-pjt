@@ -22,7 +22,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useOtherProfileStore } from '@/stores/otherprofile.js'
 import { useRoute } from 'vue-router'
 import ProfileMovie from '@/components/ProfileMovie.vue'
@@ -72,6 +72,8 @@ const onFollow = function (pk) {
 }
 
 onMounted(() => {
+  store.user.value = {}       // 초기화해서 이전 데이터 지우기!!
+  store.movies.value = []     // 초기화!!
   store.userInfo(userId)
   fetchFollowStatus()
 })
