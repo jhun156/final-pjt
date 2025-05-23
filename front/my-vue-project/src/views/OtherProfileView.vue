@@ -5,7 +5,7 @@
       <p>가입번호 : {{ user.id }}</p>
       <p>ID : {{ user.username }}</p>
       <p>Email : {{ user.email }}</p>
-      <p>팔로워 : {{ followers }} | 팔로잉 : {{ followings }}</p>
+      <p>팔로워 : {{ store.followers }} | 팔로잉 : {{ store.followings }}</p>
       <button @click="onFollow(user.id)">
         {{ isFollowed ? '언팔로우' : '팔로우' }}
       </button>
@@ -36,26 +36,10 @@ const user = store.user
 const route = useRoute()
 const userId = route.params.userid
 const userstore = useUserStore()
-const followers = computed(() => store.followers)
-const followings = computed(() => store.followings)
+const followers = ref(store.followers.value)
+const followings = ref(store.followings.value)
 
 const isFollowed = ref(false)
-
-const fetchFollowStatus = () => {
-  axios({
-    method: 'get',
-    url: `http://localhost:8000/${userId}/follow/`,
-    headers: {
-      Authorization: `Token ${userstore.token}`
-    }
-  })
-    .then(res => {
-      isFollowed.value = res.data.is_followed
-    })
-    .catch(err => {
-      console.error('팔로우 상태 조회 실패:', err.response)
-    })
-}
 
 const onFollow = function (pk) {
   axios({
@@ -68,7 +52,7 @@ const onFollow = function (pk) {
     .then(res => {
       console.log('팔로우 토글 성공', res.data)
       isFollowed.value = res.data.followed
-      window.location.reload()
+      store.userInfo(userId)
     })
     .catch(err => {
       console.error('에러', err.response)
@@ -76,10 +60,9 @@ const onFollow = function (pk) {
 }
 
 onMounted(() => {
-  store.user.value = {}       // 초기화해서 이전 데이터 지우기!!
-  store.movies.value = []     // 초기화!!
-  store.userInfo(userId)
-  fetchFollowStatus()
+  store.user.value = {}
+  store.movies.value = []
+  // store.userInfo(userId)
 })
 
 </script>
