@@ -11,6 +11,7 @@ export const useUserStore = defineStore('user', () => {
   const ACCOUNT_URL = 'http://127.0.0.1:8000/accounts'
   const isLogin = ref(false)
   const router = useRouter()
+  const username = ref('')
 
   const signUp=function(payload){
     axios({
@@ -45,7 +46,8 @@ export const useUserStore = defineStore('user', () => {
       token.value = res.data.key
       localStorage.setItem('token', res.data.key)
       window.alert('로그인 성공')
-      isLogin.value=!isLogin.value
+      isLogin.value=true
+      username.value = payload.username
       router.push({ name: 'home' })
     })
     .catch(err => console.log(err))
@@ -54,12 +56,12 @@ export const useUserStore = defineStore('user', () => {
   const logout = function () {
     token.value = ''
     localStorage.removeItem('token')
-    isLogin.value=!isLogin.value
+    isLogin.value=false
     console.log('로그아웃 완료')
   }
 
   return {
-    token, ACCOUNT_URL, isLogin,
+    token, ACCOUNT_URL, isLogin, username,
     signUp, logIn, logout
   }
 },{persist:true})

@@ -13,7 +13,7 @@
       <div v-for="comment in filteredComments" :key="comment.id" class="comment">
         <p>{{ comment.subtitle }} : {{ comment.content }}</p>
         <small>작성자: {{ comment.username }}</small>
-        <button @click.prevent="goOtherProfile(comment.user)">프로필</button>
+        <button v-show="username !== comment.username" @click.prevent="goOtherProfile(comment.user)">프로필</button>
       </div>
     </div>
     <p v-else>아직 댓글이 없습니다.</p>
@@ -35,11 +35,11 @@ const props = defineProps({
 })
 
 const store = useUserStore()
+const username = store.username
 const comments = ref([])
 const subtitle=ref('')
 const content=ref('')
 const user = profileStore.user
-
 
 const submitComment=function(){
   axios({
@@ -55,10 +55,14 @@ const submitComment=function(){
       username: user.username
     }
   })
-  .then
+  .then(res => {
+    console.log(res)
+  })
+  .catch(err => console.log(err))
 }
 
 const goOtherProfile = function (userId) {
+
   router.push({ name: 'otherprofile', params: { userid: userId } })
 }
 
