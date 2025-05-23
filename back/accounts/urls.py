@@ -5,5 +5,6 @@ urlpatterns = [
     path('userinfo/', views.user_info),
     path('userinfo/<int:userid>/', views.other_user_info),
     path('<int:user_pk>/follow/', views.follow, name='follow'),
+    path('like_movie/',views.movie_user),
 
 ]

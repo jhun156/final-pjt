@@ -1,10 +1,10 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import UserInfoSerializer,UserFollowSerializer
+from .serializers import UserInfoSerializer,UserFollowSerializer,UserMovieSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_list_or_404, get_object_or_404
-
+from rest_framework import status
 User = get_user_model()
 
 @api_view(['GET'])
@@ -50,3 +50,20 @@ def follow(request, user_pk):
     else:
         return Response({'error': '허용되지 않은 요청입니다.'}, status=405)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def movie_user(request):
+    """
+    현재 로그인된 유저가 좋아요를 누른 영화 목록을 반환합니다.
+    """
+    if request.method == 'GET':
+        # 현재 로그인된 유저 객체를 가져옵니다.
+        user = request.user
+
+        serializer = UserMovieSerializer(user)
+
+        # 직렬화된 데이터를 응답으로 반환합니다.
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    # GET 요청 외의 다른 메서드가 들어왔을 경우
+    return Response({"detail": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

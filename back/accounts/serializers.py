@@ -51,3 +51,13 @@ class UserFollowSerializer(serializers.ModelSerializer):
             return False
         return current_user in user.followers.all()
 
+class UserMovieSerializer(serializers.ModelSerializer):
+    class MovieSerializer(serializers.ModelSerializer):
+        class Meta:
+            model=Movie
+            fields=('title',)
+    movie_set=MovieSerializer(many=True,read_only=True)
+
+    class Meta:
+        model=User
+        fields=('username','movie_set')

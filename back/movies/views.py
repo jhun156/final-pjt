@@ -54,3 +54,4 @@ def comment_list(request):
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
             return Response(serializer.data, status=201)
+        
