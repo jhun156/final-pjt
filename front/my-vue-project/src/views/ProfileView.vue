@@ -28,11 +28,13 @@
   const profileStore = useProfileStore()
   const movies = computed(() => profileStore.movies)
   const user = computed(() => profileStore.user)
+
   const followers = computed(() => profileStore.followers)
   const followings = computed(() => profileStore.followings)
 
   onMounted(() => {
     profileStore.userInfo()
+    profileStore.myFollowStatus()
   })
   
 </script>
