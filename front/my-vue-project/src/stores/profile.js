@@ -5,18 +5,18 @@ import { useUserStore } from './auth.js'
 
 export const useProfileStore = defineStore('profile', () => {
 
-  const USERINFO_URL = 'http://127.0.0.1:8000/userinfo/'
-  const FOLLOW_URL = 'http://127.0.0.1:8000/'
+  const URL = 'http://127.0.0.1:8000'
   const movies = ref([])
   const user = ref({})
   const userStore = useUserStore()
+
   const followers = ref('')
   const followings = ref('')
 
   const userInfo = function () {
     axios({
       method: 'get',
-      url: `${USERINFO_URL}`,
+      url: `${URL}/userinfo/`,
       headers: {
         Authorization: `Token ${userStore.token}`
       }
@@ -31,10 +31,10 @@ export const useProfileStore = defineStore('profile', () => {
     })
   }
 
-  const followInfo = function () {
+  const myFollowStatus = function () {
     axios({
       method: 'get',
-      url: `${FOLLOW_URL}${user.value.id}/follow/`,
+      url: `${URL}/${user.value.id}/follow/`,
       headers: {
         Authorization: `Token ${userStore.token}`
       }
@@ -48,6 +48,6 @@ export const useProfileStore = defineStore('profile', () => {
 
   return {
     movies, user, followers, followings,
-    userInfo, followInfo
+    userInfo, myFollowStatus
   }
 },{persist:true})
