@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h1 class="mb-3">프로필 페이지</h1>
+    <h1 class="mb-3">나의 프로필 페이지</h1>
     <div class="mb-4">
       <p>가입번호 : {{ user.id }}</p>
       <p>ID : {{ user.username }}</p>
@@ -28,11 +28,13 @@
   const profileStore = useProfileStore()
   const movies = computed(() => profileStore.movies)
   const user = computed(() => profileStore.user)
+
   const followers = computed(() => profileStore.followers)
   const followings = computed(() => profileStore.followings)
 
   onMounted(() => {
     profileStore.userInfo()
+    profileStore.myFollowStatus()
   })
   
 </script>
