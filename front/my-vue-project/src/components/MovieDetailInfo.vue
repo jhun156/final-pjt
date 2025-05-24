@@ -58,9 +58,25 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useUserStore } from '@/stores/auth.js'
+import YoutubeTrailerModal from '../components/YoutubeTrailerModal.vue'
+import Comments from '@/components/Comments.vue'
 
-const props = defineProps({ movie: Object })
+
 const is_like = ref(false)
+
+const isModalOpen = ref(false)
+
+const props = defineProps({
+  movie: Object
+})
+
+function openModal() {
+  isModalOpen.value = true
+}
+
+function closeModal() {
+  isModalOpen.value = false
+}
 
 const toggleLike = async () => {
   if (is_like.value) {
@@ -74,17 +90,20 @@ const toggleLike = async () => {
 const onLike = async () => {
   const store = useUserStore()
   try {
-    await axios.post('http://localhost:8000/movie/', {
-      title: props.movie.title,
-      description: props.movie.overview,
-      genre: props.movie.genres.map(g => g.name).join(' | '),
-      score: props.movie.vote_average,
-      poster: props.movie.poster_path,
-      release_date: props.movie.release_date,
-      runtime: props.movie.runtime
-    }, {
+    await axios({
+      method: 'post',
+      url: 'http://localhost:8000/movie/',
       headers: {
         Authorization: `Token ${store.token}`
+      },
+      data: {
+        title: props.movie.title,
+        description: props.movie.overview,
+        genre: props.movie.genres.map(g => g.name).join(' | '),
+        score: props.movie.vote_average,
+        poster: props.movie.poster_path,
+        release_date: props.movie.release_date,
+        runtime: props.movie.runtime
       }
     })
     window.alert('저장되었습니다')
@@ -97,15 +116,22 @@ const onLike = async () => {
 const deleteMovie = async () => {
   const store = useUserStore()
   try {
-    await axios.delete('http://localhost:8000/like_movie/', {
-      headers: { Authorization: `Token ${store.token}` },
-      data: { title: props.movie.title }
+    await axios({
+      method: 'delete',
+      url: 'http://localhost:8000/like_movie/',
+      headers: {
+        Authorization: `Token ${store.token}`
+      },
+      data: {
+        title: props.movie.title
+      }
     })
     window.alert('삭제되었습니다')
   } catch (err) {
     console.error(err)
   }
 }
+
 </script>
 
 
