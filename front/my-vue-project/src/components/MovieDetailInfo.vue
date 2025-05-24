@@ -6,8 +6,15 @@
         alt="상세 이미지"
         class="movie-poster"
       />
-      <img v-show="!is_like" src="@/assets/like.png" alt="좋아요 이미지" @click="onLC">
-      <img v-show="is_like"src="@/assets/ssafyLogo.png" alt="좋아요 이미지" @click="Delete">
+      <transition name="fade-scale" mode="out-in">
+      <img
+        :key="is_like"
+        :src="is_like ? '/src/assets/ssafyLogo.png' : '/src/assets/like.png'"
+        alt="좋아요 상태"
+        class="like-image"
+        @click="toggleLike"
+      />
+      </transition>
     </div>
     <h3 class="text-center mb-3 text-primary fw-bold">{{ movie.title }} 상세 페이지</h3>
     <p class="text-center mb-1"><strong>개봉일:</strong> {{ movie.release_date }}</p>
@@ -48,78 +55,26 @@
 </template>
 
 <script setup>
-import YoutubeTrailerModal from '@/components/YoutubeTrailerModal.vue'
-import { ref,onMounted } from 'vue'
-import { useUserStore } from '@/stores/auth.js'
+import { ref } from 'vue'
 import axios from 'axios'
-import Comments from '@/components/Comments.vue'
+import { useUserStore } from '@/stores/auth.js'
 
+const props = defineProps({ movie: Object })
+const is_like = ref(false)
 
-const isModalOpen = ref(false)
-
-const props = defineProps({
-  movie: Object
-})
-
-function openModal() {
-  isModalOpen.value = true
+const toggleLike = async () => {
+  if (is_like.value) {
+    await deleteMovie()
+  } else {
+    await onLike()
+  }
+  is_like.value = !is_like.value
 }
 
-function closeModal() {
-  isModalOpen.value = false
-}
-
-const is_like=ref(false)
-
-const deleteMovie=function(){
-  const store=useUserStore()
-  axios({
-    method:'delete',
-    url:'http://localhost:8000/like_movie/',
-    headers: {
-      Authorization: `Token ${store.token}`
-    },
-    data:{
-      title:props.movie.title
-    }
-  })
-  .then(res=>{
-    console.log('삭제완료',res.data)
-    window.alert('삭제완료')
-  })
-  .catch(err=>{
-    console.log(err)
-  })
-}
-const onCheck = function () {
+const onLike = async () => {
   const store = useUserStore()
-  axios({
-    method: 'get',
-    url: 'http://localhost:8000/like_movie/',
-    headers: {
-      Authorization: `Token ${store.token}`
-    },
-  })
-  .then(res => {
-    const likedMovies = res.data.movie_set || []  // ✅ 변수 이름 통일
-    const matchedMovie = likedMovies.find(movie => movie.title === props.movie.title)
-    is_like.value = !!matchedMovie
-    console.log(res.data, is_like.value)
-  })
-  .catch(err => {
-    console.log(err, is_like.value)
-  })
-}
-
-const onLike=function(){
-  const store=useUserStore()
-  axios({
-    method:'post',
-    url:`http://localhost:8000/movie/`,
-    headers: {
-      Authorization: `Token ${store.token}`
-    },
-    data:{
+  try {
+    await axios.post('http://localhost:8000/movie/', {
       title: props.movie.title,
       description: props.movie.overview,
       genre: props.movie.genres.map(g => g.name).join(' | '),
@@ -127,31 +82,32 @@ const onLike=function(){
       poster: props.movie.poster_path,
       release_date: props.movie.release_date,
       runtime: props.movie.runtime
-    }
-  })
-  .then(res=>{
-    console.log(store.token)
-    // console.log(res.data)
+    }, {
+      headers: {
+        Authorization: `Token ${store.token}`
+      }
+    })
     window.alert('저장되었습니다')
-  })
-  .catch(err=>{    
-    console.log(err.response.data)
-    console.log(store.token)
+  } catch (err) {
+    console.error(err)
     window.alert('이미 저장되어있습니다')
-  })
+  }
 }
-const Delete=function(){
-  deleteMovie()
-  onCheck()
+
+const deleteMovie = async () => {
+  const store = useUserStore()
+  try {
+    await axios.delete('http://localhost:8000/like_movie/', {
+      headers: { Authorization: `Token ${store.token}` },
+      data: { title: props.movie.title }
+    })
+    window.alert('삭제되었습니다')
+  } catch (err) {
+    console.error(err)
+  }
 }
-const onLC=function(){
-  onLike()
-  onCheck()
-}
-onMounted(()=>{
-  onCheck()
-})
 </script>
+
 
 <style scoped>
 .movie-detail {
