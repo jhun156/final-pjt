@@ -12,7 +12,29 @@ const router = createRouter({
     {
       path: '/movies',
       name: 'MovieList',
-      component: () => import('@/views/MovieListView.vue')
+      component: () => import('@/views/MovieListView.vue'),
+      children: [
+        {
+          path: 'popular',
+          name: 'popular',
+          component: () => import('@/views/MoviePopularView.vue')
+        },
+        {
+          path: 'nowplaying',
+          name: 'nowplaying',
+          component: () => import('@/views/MovieNowPlayingView.vue')
+        },
+        {
+          path: 'toprated',
+          name: 'toprated',
+          component: () => import('@/views/MovieTopRatedView.vue')
+        },
+        {
+          path: 'upcoming',
+          name: 'upcoming',
+          component: () => import('@/views/MovieUpComingView.vue')
+        }
+      ]
     },
     {
       path: '/review-search',
