@@ -1,25 +1,27 @@
 <template>
-  <div>
-    <h1>회원가입 페이지</h1>
-    <form @submit.prevent="onSignUp">
-      <div>
-        <label for="username">username : </label>
-        <input type="text" id="username" v-model.trim="username"/>
-      </div>
-      <div>
-        <label for="password1">Password : </label>
-        <input type="password" id="password1" v-model.trim="password1"/>
-      </div>
-      <div>
-        <label for="password2">Password Confirm : </label>
-        <input type="password" id="password2" v-model.trim="password2"/>
-      </div>
-      <div>
-        <label for="email">email : </label>
-        <input type="text" id="email" v-model.trim="email"/>
-      </div>
-      <button type="submit">제출</button>
-    </form>
+  <div class="signup-container">
+    <div class="signup-card">
+      <h2 class="title">회원가입</h2>
+      <form @submit.prevent="onSignUp">
+        <div class="form-group">
+          <label for="username">아이디</label>
+          <input type="text" id="username" v-model.trim="username" required />
+        </div>
+        <div class="form-group">
+          <label for="password1">비밀번호</label>
+          <input type="password" id="password1" v-model.trim="password1" required />
+        </div>
+        <div class="form-group">
+          <label for="password2">비밀번호 확인</label>
+          <input type="password" id="password2" v-model.trim="password2" required />
+        </div>
+        <div class="form-group">
+          <label for="email">이메일</label>
+          <input type="email" id="email" v-model.trim="email" required />
+        </div>
+        <button type="submit" class="submit-btn">가입하기</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -40,10 +42,74 @@ const onSignUp = () => {
     password2: password2.value,
     email: email.value
   }
-  userStore.signUp(payload);
+  userStore.signUp(payload)
 }
 </script>
 
 <style scoped>
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background-color: #f8f9fa;
+}
 
+.signup-card {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #2c3e50;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+input {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #6c5ce7;
+  outline: none;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: #6c5ce7;
+  color: #fff;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #5a4bd3;
+}
 </style>

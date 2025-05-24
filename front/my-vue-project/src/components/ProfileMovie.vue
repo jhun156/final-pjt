@@ -1,38 +1,58 @@
 <template>
-  <div>
-    <img :src="'https://image.tmdb.org/t/p/w500/'+movie.poster" alt="좋아하는 영화">
-    <div>
-      {{ movie.title }}
-      {{ movie.description }}
+  <div class="movie-card h-100">
+    <img
+      :src="'https://image.tmdb.org/t/p/w500/' + movie.poster"
+      alt="영화 포스터"
+      class="movie-img"
+    />
+    <div class="movie-text mt-2">
+      <strong>{{ movie.title }}</strong>
+      <p class="movie-description">{{ movie.description }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-  const props = defineProps({
-    movie: Object
-  })
-
+const props = defineProps({
+  movie: Object,
+})
 </script>
 
 <style scoped>
-  img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 8px;
-  }
+.movie-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 0.75rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  div {
-    text-align: center;
-  }
+.movie-card:hover {
+  transform: translateY(-5px);
+}
 
-  div > div {
-    font-size: 14px;
-    color: #555;
-    margin-top: 4px;
-  }
+.movie-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.movie-text {
+  text-align: center;
+}
+
+.movie-description {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
-
