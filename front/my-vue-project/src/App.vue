@@ -1,22 +1,26 @@
 <template>
   <header class="sticky">
     <nav class="navbar">
-      <RouterLink :to="{ name: 'home' }" class="logo-link">
-        <img src="@/assets/ssafyLogo.png" alt="로고" class="logo-img" />
+      <!-- 개선된 HOME 버튼 -->
+      <RouterLink :to="{ name: 'home' }" class="home-button">
+        <i class="fas fa-home"></i>
+        <span>HOME</span>
       </RouterLink>
+
+      <!-- 네비게이션 링크들 -->
       <div class="nav-links">
         <RouterLink :to="{ name: 'MovieList' }" class="nav-item">영화조회</RouterLink>
         <RouterLink :to="{ name: 'ReviewSearch' }" class="nav-item">리뷰검색</RouterLink>
-        <RouterLink :to="{  name: 'Recommended' }" class="nav-item">영화추천</RouterLink>
+        <RouterLink :to="{ name: 'Recommended' }" class="nav-item">영화추천</RouterLink>
         <RouterLink :to="{ name: 'signup' }" class="nav-item" v-show="!store.isLogin">회원가입</RouterLink>
         <RouterLink :to="{ name: 'login' }" class="nav-item" v-show="!store.isLogin">로그인</RouterLink>
-        <RouterLink :to="{ name: 'profile' }" v-show="store.isLogin">프로필</RouterLink>
-        <a href="#" @click="onLogout" v-show="store.isLogin">로그아웃</a>
+        <RouterLink :to="{ name: 'profile' }" class="nav-item" v-show="store.isLogin">프로필</RouterLink>
+        <a href="#" @click="onLogout" class="nav-item" v-show="store.isLogin">로그아웃</a>
       </div>
     </nav>
   </header>
-  <RouterView />
 
+  <RouterView />
 </template>
 
 <script setup>
@@ -25,20 +29,18 @@ import { useUserStore } from '@/stores/auth.js'
 import { useRouter } from 'vue-router'
 import '@fortawesome/fontawesome-free/css/all.css'
 
-
-const store=useUserStore()
+const store = useUserStore()
 const router = useRouter()
 
-const onLogout=function(){
+const onLogout = () => {
   store.logout()
-  window.alert('로그아웃되었습니다.')
-  router.push({name:'home'})
+  alert('로그아웃되었습니다.')
+  router.push({ name: 'home' })
 }
-
 </script>
 
 <style scoped>
-/* ===== 전역 기본 스타일 ===== */
+/* ===== 전체 레이아웃 ===== */
 body {
   margin: 0;
   padding: 0;
@@ -52,7 +54,14 @@ a {
   color: inherit;
 }
 
-/* ===== 내브바 ===== */
+/* ===== 상단 고정 ===== */
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+
+/* ===== 네비게이션 바 ===== */
 .navbar {
   background-color: #000000;
   color: white;
@@ -63,19 +72,30 @@ a {
   height: 60px;
 }
 
-.logo-link {
+/* ===== HOME 버튼 (리디자인) ===== */
+.home-button {
   display: flex;
   align-items: center;
-  height: 100%;
+  gap: 8px;
+  padding: 6px 14px;
+  background-color: #00bcd4;
+  color: #ffffff;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.logo-img {
-  height: 100%;
-  max-height: 50px;
-  object-fit: contain;
+.home-button:hover {
+  background-color: #0097a7;
+  transform: translateY(-2px);
 }
 
-/* ===== 내브바 오른쪽 링크들 ===== */
+.home-button i {
+  font-size: 1.1rem;
+}
+
+/* ===== 네비게이션 링크 ===== */
 .nav-links {
   display: flex;
   gap: 1.5rem;
@@ -90,7 +110,23 @@ a {
 }
 
 .nav-item:hover {
-  color: #00bcd4; /* 민트 강조 */
+  color: #00bcd4;
+}
+
+/* ===== 버튼 공통 스타일 ===== */
+button {
+  background-color: #00bcd4;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #0097a7;
 }
 
 /* ===== 카드 ===== */
@@ -117,29 +153,14 @@ a {
   color: #cccccc;
 }
 
-/* ===== 버튼 ===== */
-button {
-  background-color: #00bcd4;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s ease;
-}
-
-button:hover {
-  background-color: #0097a7;
-}
-
 /* ===== 모달 ===== */
 .modal-backdrop {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -150,7 +171,7 @@ button:hover {
   background: #1f1f1f;
   color: white;
   border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   width: 750px;
   overflow: hidden;
   display: flex;
@@ -184,11 +205,4 @@ iframe {
   border: none;
   display: block;
 }
-
-.sticky {
-  position: sticky;
-  top: 0px;
-  z-index: 9999;
-}
-
 </style>

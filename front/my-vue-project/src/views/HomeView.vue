@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <h1 class="main-title">SSAFY 무비 월드에 오신 걸 환영합니다! 🎬</h1>
+    <h1 class="main-title">MOVIE 월드에 오신 걸 환영합니다! 🎬</h1>
     <p class="main-description">
       지금 인기 있는 영화들을 살펴보고, 리뷰를 검색하거나<br />
       당신만을 위한 영화를 추천받아보세요!

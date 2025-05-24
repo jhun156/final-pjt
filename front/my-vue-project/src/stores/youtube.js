@@ -18,7 +18,7 @@ export const useYoutubeStore = defineStore('youtube', () => {
     axios.get('https://www.googleapis.com/youtube/v3/search', {
       params: {
         part: 'snippet',
-        q: `${query} 리뷰`,
+        q: `${query}영화 리뷰, 요약`,
         type: 'video',
         maxResults: num,
         key: API_KEY,
