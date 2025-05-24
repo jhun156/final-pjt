@@ -32,7 +32,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 class UserFollowSerializer(serializers.ModelSerializer):
     followers_count = serializers.IntegerField(source='followers.count', read_only=True)
     followings_count = serializers.IntegerField(source='followings.count', read_only=True)
-    is_followed = serializers.SerializerMethodField()
+    followed = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -42,11 +42,12 @@ class UserFollowSerializer(serializers.ModelSerializer):
             'email',
             'followers_count',
             'followings_count',
-            'is_followed',
+            'followed',
         )
 
-    def get_is_followed(self, user):
-        current_user = self.context.get('request', None).user if self.context.get('request') else None
+    def get_followed(self, user):
+        request = self.context.get('request')
+        current_user = request.user if request else None
         if not current_user or not current_user.is_authenticated:
             return False
         return current_user in user.followers.all()

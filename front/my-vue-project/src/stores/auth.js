@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
   const router = useRouter()
   const username = ref('')
 
-  const signUp=function(payload){
+  const signUp = function(payload){
     axios({
       method:'post',
       url:`${ACCOUNT_URL}/signup/`,
@@ -46,7 +46,7 @@ export const useUserStore = defineStore('user', () => {
       token.value = res.data.key
       localStorage.setItem('token', res.data.key)
       window.alert('로그인 성공')
-      isLogin.value=true
+      isLogin.value = true
       username.value = payload.username
       router.push({ name: 'home' })
     })
@@ -56,7 +56,7 @@ export const useUserStore = defineStore('user', () => {
   const logout = function () {
     token.value = ''
     localStorage.removeItem('token')
-    isLogin.value=false
+    isLogin.value = false
     console.log('로그아웃 완료')
   }
 

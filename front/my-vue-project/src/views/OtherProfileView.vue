@@ -1,13 +1,13 @@
 <template>
   <div class="container mt-4">
-    <h1 class="mb-3">프로필 페이지</h1>
+    <h1 class="mb-3">{{ user.username }} 님의 프로필 페이지</h1>
     <div class="mb-4">
       <p>가입번호 : {{ user.id }}</p>
       <p>ID : {{ user.username }}</p>
       <p>Email : {{ user.email }}</p>
-      <p>팔로워 : {{ store.followers }} | 팔로잉 : {{ store.followings }}</p>
+      <p>팔로워 : {{ followers }} | 팔로잉 : {{ followings }}</p>
       <button @click="onFollow(user.id)">
-        {{ isFollowed ? '언팔로우' : '팔로우' }}
+        {{ followed ? '언팔로우' : '팔로우' }}
       </button>
 
     </div>
@@ -25,46 +25,31 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useOtherProfileStore } from '@/stores/otherprofile.js'
+import { useUserStore } from '@/stores/auth.js'
 import { useRoute } from 'vue-router'
 import ProfileMovie from '@/components/ProfileMovie.vue'
 import axios from 'axios'
-import { useUserStore } from '@/stores/auth'
 
-const store = useOtherProfileStore()
-const movies = store.movies
-const user = store.user
+const otherProfileStore = useOtherProfileStore()
 const route = useRoute()
+
+const movies = otherProfileStore.movies
+const user = otherProfileStore.user
 const userId = route.params.userid
-const userstore = useUserStore()
-const followers = ref(store.followers.value)
-const followings = ref(store.followings.value)
 
-const isFollowed = ref(false)
+const followed = otherProfileStore.followed
+const followers = otherProfileStore.followers
+const followings = otherProfileStore.followings
 
-const onFollow = function (pk) {
-  axios({
-    method: 'post',
-    url: `http://localhost:8000/${pk}/follow/`,
-    headers: {
-      Authorization: `Token ${userstore.token}`
-    }
-  })
-    .then(res => {
-      console.log('팔로우 토글 성공', res.data)
-      isFollowed.value = res.data.followed
-      store.userInfo(userId)
-    })
-    .catch(err => {
-      console.error('에러', err.response)
-    })
+const onFollow = async function (userId) {
+  await otherProfileStore.follow(userId)
+  await otherProfileStore.followStatus(userId)
 }
 
 onMounted(() => {
-  store.user.value = {}
-  store.movies.value = []
-  // store.userInfo(userId)
+  otherProfileStore.userInfo(userId)
+  otherProfileStore.followStatus(userId)
 })
-
 </script>
 
 <style scoped>
