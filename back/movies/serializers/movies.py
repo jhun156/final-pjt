@@ -21,4 +21,6 @@ class MovieSerializer(serializers.ModelSerializer):
         model = Movie
         fields = '__all__'
         read_only_fields = ('user',)  # user 필드를 read_only로 지정!
+        
+
 

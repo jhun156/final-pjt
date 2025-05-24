@@ -49,21 +49,27 @@ def follow(request, user_pk):
 
     else:
         return Response({'error': '허용되지 않은 요청입니다.'}, status=405)
-
-@api_view(['GET'])
+    
+    
+@api_view(['GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def movie_user(request):
     """
-    현재 로그인된 유저가 좋아요를 누른 영화 목록을 반환합니다.
+    GET: 로그인한 유저가 좋아요한 영화 목록 반환
+    DELETE: 영화 제목(title)로 삭제
     """
+    user = request.user
+
     if request.method == 'GET':
-        # 현재 로그인된 유저 객체를 가져옵니다.
-        user = request.user
-
         serializer = UserMovieSerializer(user)
-
-        # 직렬화된 데이터를 응답으로 반환합니다.
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    # GET 요청 외의 다른 메서드가 들어왔을 경우
+
+    elif request.method == 'DELETE':
+        title = request.data.get('title')
+        if not title:
+            return Response({"detail": "title이 필요합니다."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        movie = user.movie_set.get(title=title)
+        movie.delete()
+        return Response({"detail": f"'{title}' 삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
     return Response({"detail": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -6,8 +6,8 @@
         alt="상세 이미지"
         class="movie-poster"
       />
-      <img v-show="!is_like" src="@/assets/like.png" alt="좋아요 이미지" @click="onLC">
-      <img v-show="is_like" src="@/assets/ssafyLogo.png" alt="좋아요 이미지" @click="onLC">
+      <img src="@/assets/like.png" alt="좋아요 이미지" @click="onLC">
+      <img src="@/assets/ssafyLogo.png" alt="좋아요 이미지" @click="deleteMovie">
     </div>
     <h3 class="text-center mb-3 text-primary fw-bold">{{ movie.title }} 상세 페이지</h3>
     <p class="text-center mb-1"><strong>개봉일:</strong> {{ movie.release_date }}</p>
@@ -71,6 +71,26 @@ function closeModal() {
 
 const is_like=ref(false)
 
+const deleteMovie=function(){
+  const store=useUserStore()
+  axios({
+    method:'delete',
+    url:'http://localhost:8000/like_movie/',
+    headers: {
+      Authorization: `Token ${store.token}`
+    },
+    data:{
+      title:props.movie.title
+    }
+  })
+  .then(res=>{
+    console.log('삭제완료',res.data)
+    window.alert('삭제완료')
+  })
+  .catch(err=>{
+    console.log(err)
+  })
+}
 const onCheck=function(){
   const store=useUserStore()
   axios({

@@ -51,13 +51,17 @@ class UserFollowSerializer(serializers.ModelSerializer):
             return False
         return current_user in user.followers.all()
 
+class MovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ('id', 'title')  # id도 포함해두는 걸 추천
+
 class UserMovieSerializer(serializers.ModelSerializer):
-    class MovieSerializer(serializers.ModelSerializer):
-        class Meta:
-            model=Movie
-            fields=('title',)
-    movie_set=MovieSerializer(many=True,read_only=True)
+    movie_set = MovieSerializer(many=True, read_only=True)  # movie_set: 기본 related_name
 
     class Meta:
-        model=User
-        fields=('username','movie_set')
+        model = User
+        fields = ('username', 'movie_set')
+
+
+        
