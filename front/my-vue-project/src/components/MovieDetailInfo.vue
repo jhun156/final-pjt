@@ -6,15 +6,15 @@
         alt="상세 이미지"
         class="movie-poster"
       />
-      <transition name="fade-scale" mode="out-in">
-      <img
-        :key="is_like"
-        :src="is_like ? '/src/assets/ssafyLogo.png' : '/src/assets/like.png'"
-        alt="좋아요 상태"
-        class="like-image"
-        @click="toggleLike"
-      />
+      <transition name="like-pop" mode="out-in">
+        <div
+          :key="is_like"
+          class="like-icon"
+          :class="is_like ? 'fas fa-heart liked' : 'far fa-heart'"
+          @click="toggleLike"
+        ></div>
       </transition>
+
     </div>
     <h3 class="text-center mb-3 text-primary fw-bold">{{ movie.title }} 상세 페이지</h3>
     <p class="text-center mb-1"><strong>개봉일:</strong> {{ movie.release_date }}</p>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 import axios from 'axios'
 import { useUserStore } from '@/stores/auth.js'
 import YoutubeTrailerModal from '../components/YoutubeTrailerModal.vue'
@@ -132,6 +132,29 @@ const deleteMovie = async () => {
   }
 }
 
+const onCheck = function () {
+  const store = useUserStore()
+  axios({
+    method: 'get',
+    url: 'http://localhost:8000/like_movie/',
+    headers: {
+      Authorization: `Token ${store.token}`
+    },
+  })
+  .then(res => {
+    const likedMovies = res.data.movie_set || []  // ✅ 변수 이름 통일
+    const matchedMovie = likedMovies.find(movie => movie.title === props.movie.title)
+    is_like.value = !!matchedMovie
+    console.log(res.data, is_like.value)
+  })
+  .catch(err => {
+    console.log(err, is_like.value)
+  })
+}
+onMounted(()=>{
+  onCheck()
+})
+
 </script>
 
 
@@ -146,9 +169,12 @@ const deleteMovie = async () => {
 
 .image-wrapper {
   display: flex;
-  justify-content: center; /* 이미지 가운데 정렬 */
+  justify-content: center;
   margin-bottom: 1.5rem;
+
+  position: relative; /* ✅ 추가: 하트 아이콘 배치 기준 */
 }
+
 
 .movie-poster {
   max-width: 300px; /* 크기 줄임 */
@@ -184,6 +210,37 @@ const deleteMovie = async () => {
 .trailer-btn:hover {
   transform: scale(1.1);
 }
+.like-icon {
+  position: absolute; /* ✅ 추가 */
+  top: 1rem;
+  right: 1rem;
+
+  font-size: 2.5rem;
+  color: #e74c3c;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+
+.like-icon:hover {
+  transform: scale(1.2);
+}
+
+.liked {
+  color: #e74c3c;
+}
+
+.like-pop-enter-active,
+.like-pop-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.like-pop-enter-from,
+.like-pop-leave-to {
+  transform: scale(0.6);
+  opacity: 0;
+}
+
 </style>
 
 

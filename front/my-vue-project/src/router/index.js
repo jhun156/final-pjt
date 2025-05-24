@@ -15,15 +15,16 @@ const router = createRouter({
       component: () => import('@/views/MovieListView.vue')
     },
     {
-      path: '/:movieId',
-      name: 'MovieDetail',
-      component: () => import('@/views/MovieDetailView.vue')
-    },
-    {
       path: '/review-search',
       name: 'ReviewSearch',
       component: () => import('@/views/ReviewSearchView.vue')
     },
+    {
+      path: '/:movieId',
+      name: 'MovieDetail',
+      component: () => import('@/views/MovieDetailView.vue')
+    },
+
     {
       path: '/recommended',
       name: 'Recommended',

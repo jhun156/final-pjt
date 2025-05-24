@@ -7,7 +7,7 @@
       <div class="nav-links">
         <RouterLink :to="{ name: 'MovieList' }" class="nav-item">영화조회</RouterLink>
         <RouterLink :to="{ name: 'ReviewSearch' }" class="nav-item">리뷰검색</RouterLink>
-        <RouterLink :to="{ name: 'Recommended' }" class="nav-item">영화추천</RouterLink>
+        <RouterLink :to="{  name: 'Recommended' }" class="nav-item">영화추천</RouterLink>
         <RouterLink :to="{ name: 'signup' }" class="nav-item" v-show="!store.isLogin">회원가입</RouterLink>
         <RouterLink :to="{ name: 'login' }" class="nav-item" v-show="!store.isLogin">로그인</RouterLink>
         <RouterLink :to="{ name: 'profile' }" v-show="store.isLogin">프로필</RouterLink>
@@ -16,12 +16,15 @@
     </nav>
   </header>
   <RouterView />
+
 </template>
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { useUserStore } from '@/stores/auth.js'
 import { useRouter } from 'vue-router'
+import '@fortawesome/fontawesome-free/css/all.css'
+
 
 const store=useUserStore()
 const router = useRouter()
