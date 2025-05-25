@@ -22,11 +22,19 @@
 
     <div class="video-grid">
       <YouTubeCard
-        v-for="video in store.youtubeList"
-        :key="video.id.videoId"
+        v-for="(video, index) in store.youtubeList"
+        :key="video.etag || index"
         :video="video"
+        @open="handleOpen"
       />
     </div>
+
+    <YoutubeReviewModal
+      v-if="isModalOpen"
+      :videoId="selectedVideo?.id.videoId"
+      :videotitle="selectedVideo?.snippet.title"
+      @close="isModalOpen = false"
+    />
   </div>
 </template>
 
@@ -34,12 +42,21 @@
 import { ref } from 'vue'
 import { useYoutubeStore } from '@/stores/youtube.js'
 import YouTubeCard from '@/components/YouTubeCard.vue'
+import YoutubeReviewModal from '@/components/YoutubeReviewModal.vue'
 
 const query = ref('')
 const store = useYoutubeStore()
 
+const isModalOpen = ref(false)
+const selectedVideo = ref(null)
+
 const onsearchYoutube = () => {
   store.searchYoutube(10, query.value)
+}
+
+const handleOpen = (video) => {
+  selectedVideo.value = video
+  isModalOpen.value = true
 }
 </script>
 

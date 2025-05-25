@@ -1,43 +1,21 @@
 <template>
-  <div class="video-card">
+  <div class="video-card" @click="$emit('open', video)">
     <img 
       :src="video.snippet.thumbnails.medium.url" 
       :alt="video.snippet.title" 
-      @click="openModal" 
       class="thumbnail"
-      role="button"
-      tabindex="0"
-      @keydown.enter="openModal"
     />
     <h3 class="video-title">{{ video.snippet.title }}</h3>
     <p class="video-description">{{ video.snippet.description }}</p>
-
-    <YoutubeReviewModal 
-      v-if="isModalOpen" 
-      :videoId="video.id.videoId"
-      :videotitle="video.snippet.title" 
-      @close="closeModal" 
-    />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import YoutubeReviewModal from './YoutubeReviewModal.vue'
-
 const props = defineProps({
   video: Object,
 })
 
-const isModalOpen = ref(false)
-
-function openModal() {
-  isModalOpen.value = true
-}
-
-function closeModal() {
-  isModalOpen.value = false
-}
+const emit = defineEmits(['open'])
 </script>
 
 <style scoped>
