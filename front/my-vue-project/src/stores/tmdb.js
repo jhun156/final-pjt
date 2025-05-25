@@ -1,12 +1,16 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import dayjs from 'dayjs'
 
 export const useTMDBStore = defineStore('tmdb', () => {
 
+  const min_date = dayjs().subtract(30, 'day').format('YYYY-MM-DD')
+  const max_date = dayjs().format('YYYY-MM-DD')
+
   const API_ACCESS_KEY = import.meta.env.VITE_TMDB_ACCESS_KEY
 
-  const TMDB_API_URL = 'https://api.themoviedb.org/3/movie'
+  const TMDB_API_URL = 'https://api.themoviedb.org/3/discover/movie'
   
   // 단일 영화 세부 내용 요청
   const fetchDetailMovie = function (id) {
@@ -29,15 +33,11 @@ export const useTMDBStore = defineStore('tmdb', () => {
   const fetchTopRatedMovies = function () {
     return axios({
       method: 'get',
-      url: `${TMDB_API_URL}/top_rated`,
+      url: `${TMDB_API_URL}`,
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${API_ACCESS_KEY}`
       },
-      params: {
-        page: 1,
-        language: 'ko-KR'
-      }
     })
     .then(response => response.data.results)
     .catch(error => {
@@ -50,7 +50,7 @@ export const useTMDBStore = defineStore('tmdb', () => {
   const fetchPopularMovies = function () {
     return axios({
       method: 'get',
-      url: `${TMDB_API_URL}/popular`,
+      url: `${TMDB_API_URL}`,
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${API_ACCESS_KEY}`
@@ -71,7 +71,7 @@ export const useTMDBStore = defineStore('tmdb', () => {
   const fetchNowPlayingMovies = function () {
     return axios({
       method: 'get',
-      url: `${TMDB_API_URL}/now_playing`,
+      url: `${TMDB_API_URL}`,
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${API_ACCESS_KEY}`
@@ -79,6 +79,12 @@ export const useTMDBStore = defineStore('tmdb', () => {
       params: {
         page: 1,
         language: 'ko-KR',
+        sort_by: 'popularity.desc',
+        include_adult: false,
+        include_video: false,
+        with_release_type: '2|3',
+        'release_date.gte': min_date,
+        'release_date.lte': max_date
       }
     })
     .then(response => response.data.results)
@@ -92,7 +98,7 @@ export const useTMDBStore = defineStore('tmdb', () => {
   const fetchUpComingMovies = function () {
     return axios({
       method: 'get',
-      url: `${TMDB_API_URL}/upcoming`,
+      url: `${TMDB_API_URL}`,
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${API_ACCESS_KEY}`

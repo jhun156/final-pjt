@@ -8,15 +8,21 @@
       />
       <div class="card-body d-flex flex-column">
         <h5 class="card-title text-center text-primary fw-bold">{{ movie.title }}</h5>
-        <p class="card-text">{{ movie.overview }}</p>
+        <p class="card-text">{{ truncatedOverview }}</p>
       </div>
     </div>
   </RouterLink>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 const props = defineProps({
   movie: Object
+})
+
+const truncatedOverview = computed(() => {
+  const text = props.movie.overview || ''
+  return text.length > 150 ? text.slice(0, 150) + '...' : text
 })
 </script>
 
