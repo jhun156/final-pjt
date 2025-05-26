@@ -14,8 +14,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
-import { useTMDBStore } from '@/stores/tmdb.js'
+
 
 const props = defineProps({
   movie: Object,

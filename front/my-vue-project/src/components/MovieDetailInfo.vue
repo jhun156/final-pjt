@@ -16,7 +16,7 @@
       </transition>
 
     </div>
-    <h3 class="text-center mb-3 text-primary fw-bold">{{ movie.title }} 상세 페이지</h3>
+    <h3 class="text-center mb-3">{{ movie.title }} 상세 페이지</h3>
     <p class="text-center mb-1"><strong>개봉일:</strong> {{ movie.release_date }}</p>
     <p class="text-center mb-1"><strong>러닝타임:</strong> {{ movie.runtime }}분</p>
     <p class="text-center mb-3"><strong>TMDB 평점:</strong> {{ movie.vote_average }}</p>
@@ -51,7 +51,7 @@
     <h5 class="fw-semibold text-center mb-3">공식 예고편</h5>
     <div class="d-flex justify-content-center mb-3">
       <img 
-        src="@/assets/youtubebutton.png" 
+        src="@/assets/preview.png" 
         alt="trailer" 
         @click="openModal" 
         class="trailer-btn"
@@ -218,7 +218,7 @@ onMounted(()=>{
 }
 
 .movie-detail h3, .movie-detail h5 {
-  color: #0d6efd;
+  color: #346ab9;
   user-select: none;
 }
 
@@ -233,10 +233,10 @@ onMounted(()=>{
 
 .trailer-btn {
   all: unset;
-  width: 250px;
-  height: 64px;
+  width: 150px;
+  height: 150px;
   cursor: pointer;
-  filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.7));
+  /* filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.7)); */
 }
 
 .trailer-btn:hover {
