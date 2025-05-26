@@ -1,9 +1,9 @@
 <template>
   <div>
-    <MovieSlider title="높은 평점순 영화" :movies="topratedmovies" />
-    <MovieSlider title="인기작" :movies="popularmovies" />
+    <MovieSlider title="높은 평점작" :movies="topratedmovies" />
+    <MovieSlider title="인기 상영작" :movies="popularmovies" />
     <MovieSlider title="현재 상영작" :movies="nowplayingmovies" />
-    <MovieSlider title="개봉 예정작" :movies="upcomingmovies" />
+    <MovieSlider title="최신 개봉작" :movies="latestmovies" />
   </div>
 </template>
 
@@ -17,13 +17,13 @@ const store = useTMDBStore()
 const topratedmovies = ref([])
 const popularmovies = ref([])
 const nowplayingmovies = ref([])
-const upcomingmovies = ref([])
+const latestmovies = ref([])
 
 onMounted(async () => {
   topratedmovies.value = await store.fetchTopRatedMovies()
   popularmovies.value = await store.fetchPopularMovies()
   nowplayingmovies.value = await store.fetchNowPlayingMovies()
-  upcomingmovies.value = await store.fetchUpComingMovies()
+  latestmovies.value = await store.fetchLatestMovies()
 })
 </script>
 
