@@ -3,9 +3,11 @@
     <h1 class="text-center mb-4">{{ user.username }} 님의 프로필 페이지</h1>
 
     <div class="profile-card mx-auto mb-5">
-      <p><strong>가입번호:</strong> {{ user.id }}</p>
+      <p><strong>닉네임:</strong> {{ user.nickname }}</p>
       <p><strong>ID:</strong> {{ user.username }}</p>
       <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>성별:</strong> {{ user.gender }}</p>
+      <p><strong>선호 장르:</strong> {{ user.genre }}</p>
 
       <div class="follow-box">
         <div class="follow-item">
