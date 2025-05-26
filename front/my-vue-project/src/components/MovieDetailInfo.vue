@@ -223,7 +223,7 @@ onMounted(()=>{
 }
 
 .movie-detail p {
-  color: black;
+  color: rgb(245, 239, 239);
   user-select: text;
   max-width: 700px;
   margin-left: auto;
@@ -302,7 +302,7 @@ ul {
   flex: 0 0 auto;
   width: 160px;
   scroll-snap-align: start;
-  background: white;
+  background: rgb(32, 22, 22);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   text-align: center;

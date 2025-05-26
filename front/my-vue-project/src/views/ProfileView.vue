@@ -48,7 +48,7 @@ onMounted(() => {
 
 <style scoped>
 h1 {
-  color: #2c3e50;
+  color: #bdc6cf;
   font-weight: bold;
 }
 

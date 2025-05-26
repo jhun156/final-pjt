@@ -85,7 +85,7 @@ const onSignUp = () => {
   justify-content: center;
   align-items: center;
   min-height: 80vh;
-  background-color: #f8f9fa;
+  background-color:black;
 }
 
 .signup-card {
