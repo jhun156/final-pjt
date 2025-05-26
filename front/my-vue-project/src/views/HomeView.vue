@@ -15,7 +15,7 @@
       <div class="info-section">
         <h2 class="info-title">📌 이용 안내</h2>
         <ul class="info-list">
-          <li><span class="label">🎬 영화 조회:</span> TMDB 사이트의 데이터를 바탕으로 평점순, 인기작, 현재 상영작, 개봉 예정작을 카테고리별로 볼 수 있습니다.</li>
+          <li><span class="label">🎬 영화 조회:</span> TMDB 사이트의 데이터를 바탕으로 높은 평점작, 인기 상영작, 현재 상영작, 최신 개봉작을 카테고리별로 볼 수 있습니다.</li>
           <li><span class="label">🔎 리뷰 검색:</span> 영화 제목을 입력하여 해당 영화에 대한 리뷰를 확인할 수 있습니다.</li>
           <li><span class="label">🌤️ 영화 추천:</span> 현재 날씨를 입력하면 날씨에 어울리는 영화 리뷰를 추천해드립니다.</li>
           <li><span class="label">👤 프로필:</span> 로그인된 사용자의 정보를 확인할 수 있습니다.</li>

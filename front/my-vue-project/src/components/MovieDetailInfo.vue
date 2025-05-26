@@ -29,30 +29,24 @@
     <h5 class="fw-semibold text-center mb-2">줄거리</h5>
     <p class="mb-4">{{ movie.overview }}</p>
 
-    <h5 v-show="casts.length > 0" class="fw-semibold text-center mb-2">감독 / 출연</h5>
-      <div v-if="director">
-        <img 
-          v-if="director.profile_path" 
-          :src="`https://image.tmdb.org/t/p/w185${director.profile_path}`" 
-          alt="감독 이미지"
-        >
-        <p>감독 Director</p>
-        <p>감독명 : {{ director.original_name }} / 한글 이름 : {{ director.name }}</p>
+    <div class="cast-wrapper">
+      <button class="arrow left" @click="scrollLeft">&#10094;</button>
+      <div class="cast-slider" ref="sliderRef">
+        <div class="person-card" v-if="director">
+          <img v-if="director.profile_path" :src="`https://image.tmdb.org/t/p/w185${director.profile_path}`" alt="감독 이미지">
+          <p><strong>감독</strong></p>
+          <p>{{ director.original_name }}</p>
+          <p>{{ director.name }}</p>
+        </div>
+        <div class="person-card" v-for="cast in casts" :key="cast.cast_id">
+          <img v-if="cast.profile_path" :src="`https://image.tmdb.org/t/p/w185${cast.profile_path}`" alt="출연진 이미지">
+          <p><strong>{{ cast.character }}</strong></p>
+          <p>{{ cast.original_name }}</p>
+          <p>{{ cast.name }}</p>
+        </div>
       </div>
-    
-      <div v-if="casts.length > 0">
-        <ul>
-          <li v-for="cast in casts" :key="cast.cast_id">
-            <img 
-              v-if="cast.profile_path" 
-              :src="`https://image.tmdb.org/t/p/w185${cast.profile_path}`" 
-              alt="출연진 이미지"
-            >
-            <p>배역 : {{ cast.character }}</p>
-            <p>배우명 : {{ cast.original_name }} / 한글 이름 : {{ cast.name }}</p>
-          </li>
-        </ul>
-      </div>
+      <button class="arrow right" @click="scrollRight">&#10095;</button>
+    </div>
 
     <h5 class="fw-semibold text-center mb-3">공식 예고편</h5>
     <div class="d-flex justify-content-center mb-3">
@@ -89,20 +83,25 @@ import Comments from '@/components/Comments.vue'
 
 const is_like = ref(false)
 const isModalOpen = ref(false)
+const sliderRef = ref(null)
 const props = defineProps({
   movie: Object
 })
 
 const casts = computed(() => {
-  return (props.movie.credits?.cast || []).slice(0, 5)
+  return (props.movie.credits?.cast || []).slice(0, 10)
 })
 
 const director = computed(() => {
   return props.movie.credits?.crew?.find(person => person.job === 'Director') || null
 })
 
-console.log(casts)
-console.log(director)
+const scrollLeft = () => {
+  sliderRef.value.scrollBy({ left: -200, behavior: 'smooth' })
+}
+const scrollRight = () => {
+  sliderRef.value.scrollBy({ left: 200, behavior: 'smooth' })
+}
 
 function openModal() {
   isModalOpen.value = true
@@ -176,7 +175,7 @@ const onCheck = function () {
     },
   })
   .then(res => {
-    const likedMovies = res.data.movie_set || []  // ✅ 변수 이름 통일
+    const likedMovies = res.data.movie_set || []
     const matchedMovie = likedMovies.find(movie => movie.title === props.movie.title)
     is_like.value = !!matchedMovie
     console.log(res.data, is_like.value)
@@ -193,7 +192,6 @@ onMounted(()=>{
 
 <style scoped>
 .movie-detail {
-  /* background-color: #121212; */
   color: black;
   min-height: 100vh;
   border-radius: 0.25rem;
@@ -205,21 +203,20 @@ onMounted(()=>{
   justify-content: center;
   margin-bottom: 1.5rem;
 
-  position: relative; /* ✅ 추가: 하트 아이콘 배치 기준 */
+  position: relative;
 }
 
-
 .movie-poster {
-  max-width: 300px; /* 크기 줄임 */
+  max-width: 300px;
   width: 100%;
   height: auto;
-  background-color: transparent; /* 검은 배경 없애기 */
+  background-color: transparent;
   border-radius: 8px;
-  box-shadow: none; /* 혹시 그림자 있으면 제거 */
+  box-shadow: none;
 }
 
 .movie-detail h3, .movie-detail h5 {
-  color: #0d6efd; /* 부트스트랩 기본 파란색 */
+  color: #0d6efd;
   user-select: none;
 }
 
@@ -234,7 +231,7 @@ onMounted(()=>{
 
 .trailer-btn {
   all: unset;
-  width: 64px;
+  width: 250px;
   height: 64px;
   cursor: pointer;
   filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.7));
@@ -244,7 +241,7 @@ onMounted(()=>{
   transform: scale(1.1);
 }
 .like-icon {
-  position: absolute; /* ✅ 추가 */
+  position: absolute;
   top: 1rem;
   right: 1rem;
 
@@ -275,10 +272,68 @@ onMounted(()=>{
 
 ul {
   list-style: none;
-  padding: 0;  /* ← 왼쪽 들여쓰기도 없애고 싶다면 이거도!! */
+  padding: 0;
   margin: 0;
 }
 
+.cast-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cast-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding: 1rem;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.cast-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.person-card {
+  flex: 0 0 auto;
+  width: 160px;
+  scroll-snap-align: start;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 0.5rem;
+}
+.person-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  font-size: 2rem;
+  background-color: rgba(255,255,255,0.8);
+  border: none;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+.arrow:hover {
+  background-color: rgba(200, 200, 200, 0.9);
+}
+.arrow.left {
+  left: -2.5rem;
+}
+.arrow.right {
+  right: -2.5rem;
+}
 </style>
 
 
