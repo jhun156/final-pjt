@@ -51,7 +51,7 @@ const isModalOpen = ref(false)
 const selectedVideo = ref(null)
 
 const onsearchYoutube = () => {
-  store.searchYoutube(10, query.value)
+  store.searchYoutube(30, query.value)
 }
 
 const handleOpen = (video) => {

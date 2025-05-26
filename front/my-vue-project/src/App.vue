@@ -19,7 +19,6 @@
       </div>
     </nav>
   </header>
-
   <RouterView />
 </template>
 

@@ -1,6 +1,8 @@
 // src/stores/useMovieStore.js
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import axios from 'axios';
+
 
 export const useMovieStore = defineStore('movie', () => {
   const recommendedMovies = ref([]);
@@ -11,27 +13,41 @@ export const useMovieStore = defineStore('movie', () => {
 
   const youtubeApiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
 
-  async function fetchMovies(keyword) {
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(keyword)} 예고편&type=video&key=${youtubeApiKey}`;
+  function fetchMovies(keyword) {
+  const API_KEY = youtubeApiKey; // 또는 const youtubeApiKey = ...
+  const url = 'https://www.googleapis.com/youtube/v3/search';
 
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
+  axios({
+    method: 'get',
+    url: url,
+    params: {
+      part: 'snippet',
+      maxResults: 28,
+      q: `${keyword} 리뷰`,
+      type: 'video',
+      key: API_KEY,
+    },
+  })
+    .then((response) => {
+      const items = response.data.items;
+      console.log(keyword)
 
-      if (!data.items?.length) {
+      if (!items || items.length === 0) {
         error.value = '예고편을 찾을 수 없습니다.';
         return;
       }
 
-      recommendedMovies.value = data.items.map(item => ({
+      recommendedMovies.value = items.map(item => ({
         title: item.snippet.title,
         videoId: item.id.videoId,
         thumbnail: item.snippet.thumbnails.medium.url,
       }));
-    } catch (err) {
+    })
+    .catch((err) => {
       error.value = `YouTube API 오류: ${err.message}`;
-    }
-  }
+    });
+}
+
 
   function openModal(videoId, title) {
     selectedVideoId.value = videoId;
