@@ -145,4 +145,25 @@ input:focus {
 .submit-btn:hover {
   background-color: #5a4bd3;
 }
+
+select {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+  background-color: #fff;
+  color: #2c3e50;
+  appearance: none; /* 브라우저 기본 화살표 제거 */
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%236c5ce7' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 1rem;
+}
+select:focus {
+  border-color: #6c5ce7;
+  outline: none;
+}
 </style>

@@ -14,6 +14,12 @@ export const useUserStore = defineStore('user', () => {
   const username = ref('')
 
   const signUp = function(payload){
+
+    if (payload.age > 100) {
+      window.alert('나이는 100세 이하로 입력해주세요')
+      return
+    }
+
     axios({
       method:'post',
       url:`${ACCOUNT_URL}/signup/`,
@@ -33,7 +39,12 @@ export const useUserStore = defineStore('user', () => {
         window.alert('회원가입 성공, 로그인하세요')
         router.push({ name: 'login' })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log('회원가입 실패', err.response.data)
+        const errorData = err.response.data
+        const messages = Object.values(errorData).flat().join('\n')
+        window.alert(messages)
+      })
   }
 
   const logIn = function(payload){
@@ -54,7 +65,12 @@ export const useUserStore = defineStore('user', () => {
       username.value = payload.username
       router.push({ name: 'home' })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log('로그인 실패', err.response.data)
+        const errorData = err.response.data
+        const messages = Object.values(errorData).flat().join('\n')
+        window.alert(messages)
+    })
   }
 
   const logout = function () {

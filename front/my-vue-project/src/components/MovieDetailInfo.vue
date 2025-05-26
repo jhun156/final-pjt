@@ -136,7 +136,8 @@ const onLike = async () => {
         score: props.movie.vote_average,
         poster: props.movie.poster_path,
         release_date: props.movie.release_date,
-        runtime: props.movie.runtime
+        runtime: props.movie.runtime,
+        movie_num: props.movie.id
       }
     })
     window.alert('저장되었습니다')
@@ -186,6 +187,7 @@ const onCheck = function () {
 }
 onMounted(()=>{
   onCheck()
+  console.log(props.movie.data)
 })
 
 </script>
