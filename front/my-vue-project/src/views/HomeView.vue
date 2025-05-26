@@ -51,7 +51,7 @@ import { RouterLink } from 'vue-router'
   align-items: center; /* 가로 가운데 정렬 */
   text-align: center;
   padding: 0.5rem 0.5rem;
-  background-color: #ffffff;
+  background-color: black;
   overflow: hidden;
 }
 
@@ -59,7 +59,7 @@ import { RouterLink } from 'vue-router'
 .main-title {
   
   font-size: 2.8rem;
-  color: #333333;
+  color: #beb1b1;
   font-weight: 800;
   margin-bottom: 1rem;
 }
@@ -71,7 +71,7 @@ import { RouterLink } from 'vue-router'
 /* 설명 텍스트 진하게 수정 */
 .main-description {
   font-size: 1.2rem;
-  color: #444444;
+  color: #bbb6b6;
   line-height: 1.6;
   margin-bottom: 2rem;
 }

@@ -31,6 +31,7 @@ function closeModal() {
 </script>
 
 <style scoped>
+
 .modal-backdrop {
   position: fixed;
   top: 0;
