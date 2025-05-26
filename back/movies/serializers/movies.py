@@ -6,7 +6,7 @@ from accounts.models import User
 class MovieListSerializer(serializers.ModelSerializer): 
     class Meta: 
         model = Movie 
-        fields = ('title', 'description', 'poster',)
+        fields = ('title', 'description', 'poster', 'movie_num', )
 
 # 단일 영화 정보 (리뷰목록 포함)
 class MovieSerializer(serializers.ModelSerializer):
@@ -16,7 +16,8 @@ class MovieSerializer(serializers.ModelSerializer):
             fields = ('subtitle', 'content',) 
             
     comment_set = CommentListSerializer(many=True, read_only=True)
-    
+    movie_num = serializers.IntegerField()
+
     class Meta: 
         model = Movie
         fields = '__all__'
