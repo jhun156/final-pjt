@@ -25,6 +25,7 @@ export const useUserStore = defineStore('user', () => {
         gender:payload.gender,
         age:payload.age,
         nickname:payload.nickname,
+        genre:payload.genre
       }
     })
       .then(res => {

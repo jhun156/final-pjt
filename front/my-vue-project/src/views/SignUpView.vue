@@ -29,6 +29,14 @@
           </select>
         </div>
         <div class="form-group">
+          <label>좋아하는 장르</label>
+          <label><input type="checkbox" value="드라마 | 로맨스" v-model="genre"> 드라마/로맨스</label>
+          <label><input type="checkbox" value="판타지" v-model="genre"> 판타지</label>
+          <label><input type="checkbox" value="코미디" v-model="genre"> 코미디</label>
+          <label><input type="checkbox" value="범죄 | 스릴러" v-model="genre"> 범죄/스릴러</label>
+          <label><input type="checkbox" value="액션" v-model="genre"> 액션</label>
+        </div>
+        <div class="form-group">
           <label for="email">이메일</label>
           <input type="email" id="email" v-model.trim="email" required />
         </div>
@@ -54,6 +62,7 @@ const email = ref('')
 const gender=ref('')
 const age=ref(0)
 const nickname=ref('')
+const genre=ref([])
 
 const onSignUp = () => {
   const payload = {
@@ -64,6 +73,7 @@ const onSignUp = () => {
     gender:gender.value,
     age:age.value,
     nickname:nickname.value,
+    genre: genre.value.join(' | ') 
   }
   userStore.signUp(payload)
 }

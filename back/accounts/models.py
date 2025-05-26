@@ -13,6 +13,7 @@ class User(AbstractUser):
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, null=True, blank=True)
     age = models.PositiveIntegerField(null=True, blank=True)
     nickname = models.CharField(max_length=30, unique=True, null=True, blank=True)
+    genre = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.username
