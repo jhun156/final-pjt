@@ -70,12 +70,14 @@ class CustomRegisterSerializer(RegisterSerializer):
     age=serializers.IntegerField(required=True)
     gender=serializers.ChoiceField(choices=User.GENDER_CHOICES,required=True)
     nickname=serializers.CharField(required=False)
+    genre=serializers.CharField(required=False)
 
     def get_cleaned_data(self):
         data=super().get_cleaned_data()
         data['gender']=self.validated_data.get('gender')
         data['age']=self.validated_data.get('age')
         data['nickname']=self.validated_data.get('nickname')
+        data['genre']=self.validated_data.get('genre')
         return data
     
     def save(self, request):
@@ -83,6 +85,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.gender=self.validated_data.get('gender')
         user.age=self.validated_data.get('age')
         user.nickname=self.validated_data.get('nickname')
+        user.genre=self.validated_data.get('genre')
         user.save()
         return user
     
