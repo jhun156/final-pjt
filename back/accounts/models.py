@@ -5,12 +5,12 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     followings=models.ManyToManyField('self',symmetrical=False,related_name='followers')
     GENDER_CHOICES = (
-        ('MEN', 'Male'),
-        ('women', 'Female'),
-        ('Nope', 'Other'),
+        ('MEN', 'MEN'),
+        ('WOMEN', 'WOMEN'),
+        ('SECRET', 'SECRET'),
     )
     
-    gender = models.CharField(max_length=5, choices=GENDER_CHOICES, null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, null=True, blank=True)
     age = models.PositiveIntegerField(null=True, blank=True)
     nickname = models.CharField(max_length=30, unique=True, null=True, blank=True)
 

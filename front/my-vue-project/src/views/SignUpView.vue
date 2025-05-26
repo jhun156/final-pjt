@@ -23,9 +23,9 @@
           <label for="gender">성별</label>
           <select v-model.trim="gender" id="gender">
             <option disabled value="">성별 선택</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-            <option value="O">Other</option>
+            <option value="MEN">MEN</option>
+            <option value="WOMEN">WOMEN</option>
+            <option value="SECRET">SECRET</option>
           </select>
         </div>
         <div class="form-group">
