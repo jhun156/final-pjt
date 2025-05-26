@@ -21,7 +21,10 @@ export const useUserStore = defineStore('user', () => {
         username: payload.username,
         password1: payload.password1,
         password2: payload.password2,
-        email: payload.email
+        email: payload.email,
+        gender:payload.gender,
+        age:payload.age,
+        nickname:payload.nickname,
       }
     })
       .then(res => {
