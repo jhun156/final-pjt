@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'allauth',
+    'allauth.socialaccount', 
     'allauth.account',
     'django.contrib.sites',
     'django.contrib.admin',
@@ -162,3 +163,4 @@ REST_FRAMEWORK = {
 REST_AUTH={
     'REGISTER_SERIALIZER':'accounts.serializers.CustomRegisterSerializer'
 }
+SITE_ID = 1

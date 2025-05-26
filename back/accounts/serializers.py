@@ -89,3 +89,36 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.save()
         return user
     
+class UserUpdateSerializer(serializers.ModelSerializer):
+    password1 = serializers.CharField(write_only=True, required=False)
+    password2 = serializers.CharField(write_only=True, required=False)
+
+    class Meta:
+        model = User
+        fields = ['age', 'gender', 'genre', 'password1', 'password2']
+
+    def validate(self, data):
+        pw1 = data.get('password1')
+        pw2 = data.get('password2')
+        
+        # 비밀번호 둘 다 비어있으면 검사 X
+        if pw1 is not None and pw2 is not None and (pw1 != "" or pw2 != ""):
+            if pw1 != pw2:
+                raise serializers.ValidationError("비밀번호가 일치하지 않습니다.")
+            if len(pw1) < 8:
+                raise serializers.ValidationError("비밀번호는 최소 8자 이상이어야 합니다.")
+        return data
+
+
+    def update(self, instance, validated_data):
+        if 'age' in validated_data:
+            instance.age = validated_data['age']
+        if 'gender' in validated_data:
+            instance.gender = validated_data['gender']
+        if 'genre' in validated_data:
+            instance.genre = validated_data['genre']
+        if validated_data.get('password1'):
+            instance.set_password(validated_data['password1'])
+
+        instance.save()
+        return instance

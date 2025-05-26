@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import UserInfoSerializer,UserFollowSerializer,UserMovieSerializer
+from .serializers import UserInfoSerializer,UserFollowSerializer,UserMovieSerializer,UserUpdateSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework import status
@@ -73,3 +73,18 @@ def movie_user(request):
         movie.delete()
         return Response({"detail": f"'{title}' 삭제 완료"}, status=status.HTTP_204_NO_CONTENT)
     return Response({"detail": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+@api_view(['DELETE','PUT'])
+@permission_classes([IsAuthenticated])
+def delete_or_change_user(request):
+    if request.method=='DELETE':
+        user=request.user
+        user.delete()
+        return Response({"detail":f"'{request.user}'삭제완료"})
+    elif request.method == 'PUT':
+        user=request.user
+        serializer = UserUpdateSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"detail": "정보가 성공적으로 수정되었습니다."})
+        return Response(serializer.errors, status=400)
