@@ -4,6 +4,10 @@
       <h2 class="title">회원가입</h2>
       <form @submit.prevent="onSignUp">
         <div class="form-group">
+          <label for="nickname">닉네임</label>
+          <input type="text" id="nickname" v-model.trim="nickname" required />
+        </div>
+        <div class="form-group">
           <label for="username">아이디</label>
           <input type="text" id="username" v-model.trim="username" required />
         </div>
@@ -16,8 +20,21 @@
           <input type="password" id="password2" v-model.trim="password2" required />
         </div>
         <div class="form-group">
+          <label for="gender">성별</label>
+          <select v-model.trim="gender" id="gender">
+            <option disabled value="">성별 선택</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="O">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="email">이메일</label>
           <input type="email" id="email" v-model.trim="email" required />
+        </div>
+        <div class="form-group">
+          <label for="age">나이</label>
+          <input type="number" id="age" v-model.trim="age" required />
         </div>
         <button type="submit" class="submit-btn">가입하기</button>
       </form>
@@ -34,13 +51,19 @@ const username = ref('')
 const password1 = ref('')
 const password2 = ref('')
 const email = ref('')
+const gender=ref('')
+const age=ref(0)
+const nickname=ref('')
 
 const onSignUp = () => {
   const payload = {
     username: username.value,
     password1: password1.value,
     password2: password2.value,
-    email: email.value
+    email: email.value,
+    gender:gender.value,
+    age:age.value,
+    nickname:nickname.value,
   }
   userStore.signUp(payload)
 }

@@ -158,3 +158,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+REST_AUTH={
+    'REGISTER_SERIALIZER':'accounts.serializers.CustomRegisterSerializer'
+}

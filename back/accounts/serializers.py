@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from movies.models import Movie, Comment
-
+from .models import User
+from dj_rest_auth.registration.serializers import RegisterSerializer
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
@@ -65,4 +66,23 @@ class UserMovieSerializer(serializers.ModelSerializer):
         fields = ('username', 'movie_set')
 
 
-        
+class CustomRegisterSerializer(RegisterSerializer):
+    age=serializers.IntegerField(required=True)
+    gender=serializers.ChoiceField(choices=User.GENDER_CHOICES,required=True)
+    nickname=serializers.CharField(required=False)
+
+    def get_cleaned_data(self):
+        data=super().get_cleaned_data()
+        data['gender']=self.validated_data.get('gender')
+        data['age']=self.validated_data.get('age')
+        data['nickname']=self.validated_data.get('nickname')
+        return data
+    
+    def save(self, request):
+        user=super().save(request)
+        user.gender=self.validated_data.get('gender')
+        user.age=self.validated_data.get('age')
+        user.nickname=self.validated_data.get('nickname')
+        user.save()
+        return user
+    
