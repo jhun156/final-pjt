@@ -49,6 +49,11 @@ const router = createRouter({
       path: '/otherprofile/:userid/',
       name: 'otherprofile',
       component: () => import('@/views/OtherProfileView.vue')
+    },
+    {
+      path:'/update',
+      name:'update',
+      component:()=>import('@/views/updateProfile.vue')
     }
   ],
 })

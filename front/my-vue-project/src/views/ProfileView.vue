@@ -7,6 +7,7 @@
       <p><strong>ID:</strong> {{ user.username }}</p>
       <p><strong>Email:</strong> {{ user.email }}</p>
       <p><strong>성별:</strong> {{ user.gender }}</p>
+      <p><strong>나이:</strong> {{ user.age }}</p>
       <p><strong>선호 장르:</strong> {{ user.genre }}</p>
       <div class="follow-box">
         <div class="follow-item">
@@ -17,6 +18,8 @@
           <div class="follow-count">{{ followings }}</div>
           <div class="follow-label">팔로잉</div>
         </div>
+        <button @click="userStore.deleteUser" class="delete-account-btn">회원탈퇴</button>
+        <button @click="update" class="update-account-btn">회원정보 수정</button>
       </div>
 
     </div>
@@ -33,13 +36,21 @@
 import { onMounted, computed } from 'vue'
 import { useProfileStore } from '@/stores/profile.js'
 import ProfileMovie from '@/components/ProfileMovie.vue'
+import {useUserStore} from '@/stores/auth.js'
+import {useRouter} from 'vue-router'
 
 const profileStore = useProfileStore()
 const movies = computed(() => profileStore.movies)
 const user = computed(() => profileStore.user)
 const followers = computed(() => profileStore.followers)
 const followings = computed(() => profileStore.followings)
+const userStore=useUserStore()
+const router=useRouter()
 
+
+const update=function() {
+  router.push({name:'update'})
+}
 onMounted(() => {
   profileStore.userInfo()
   profileStore.myFollowStatus()
@@ -114,4 +125,38 @@ h1 {
   font-size: 1rem;
   color: #34495e;
 }
+.delete-account-btn {
+  background-color: #e74c3c;
+  color: white;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.delete-account-btn:hover {
+  background-color: #c0392b;
+}
+.update-account-btn {
+  background-color: #49369b; /* 원하는 배경색 */
+  color: white;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.update-account-btn:hover {
+  background-color: #35297d; /* hover 시 어두운 보라색 */
+}
+
+
 </style>

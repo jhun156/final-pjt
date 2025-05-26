@@ -1,10 +1,9 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import axios, { Axios } from 'axios'
 
 export const useUserStore = defineStore('user', () => {
-
   const storedToken = localStorage.getItem('token')
   const token = ref(storedToken || '')
 
@@ -12,6 +11,27 @@ export const useUserStore = defineStore('user', () => {
   const isLogin = ref(false)
   const router = useRouter()
   const username = ref('')
+
+  const deleteUser=function(){
+    axios({
+      method:'delete',
+      url:`${ACCOUNT_URL}/delete_or_change_user/`,
+      headers: {
+      Authorization: `Token ${token.value}`
+    }
+    })
+    .then(res=>{
+      window.alert('회원탈퇴 완료')
+      router.push({name:'home'})
+      logout()
+    })
+    .catch(err=>{
+      console.log(err)
+      console.log('토큰:', token.value)
+    })
+  }
+
+
 
   const signUp = function(payload){
 
@@ -80,8 +100,46 @@ export const useUserStore = defineStore('user', () => {
     console.log('로그아웃 완료')
   }
 
+  const Update=function(payload){
+      if (age.value > 100) {
+        window.alert('나이는 100세 이하로 입력해주세요')
+        return
+      }
+
+      if ((password1.value || password2.value) && password1.value !== password2.value) {
+        window.alert('비밀번호가 일치하지 않습니다')
+        return
+      }
+
+      axios({
+        method: 'put',
+        url: `${ACCOUNT_URL}/delete_or_change_user/`,
+        headers: {
+          Authorization: `Token ${token.value}`
+        },
+        data: payload
+      })
+        .then(res => {
+          console.log('회원정보 수정 성공', res.data)
+          window.alert('정보가 성공적으로 수정되었습니다.')
+
+          if (password1.value) {
+            logout()
+            window.alert('비밀번호가 변경되어 다시 로그인해주세요')
+            router.push({name:'login'})
+          }
+          router.push({name:'profile'})
+        })
+        .catch(err => {
+          console.log('회원정보 수정 실패', err.response?.data)
+          const errorData = err.response?.data
+          const messages = Object.values(errorData).flat().join('\n')
+          window.alert(messages)
+        })
+  }
+
   return {
     token, ACCOUNT_URL, isLogin, username,
-    signUp, logIn, logout
+    signUp, logIn, logout, deleteUser,Update
   }
 },{persist:true})
