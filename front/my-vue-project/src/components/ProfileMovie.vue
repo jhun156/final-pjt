@@ -1,5 +1,5 @@
 <template>
-  <div class="movie-card h-100">
+  <div class="movie-card h-100" @click="goDetail(movie.movie_num)">
     <img
       :src="'https://image.tmdb.org/t/p/w500/' + movie.poster"
       alt="영화 포스터"
@@ -13,9 +13,19 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useTMDBStore } from '@/stores/tmdb.js'
+
 const props = defineProps({
   movie: Object,
 })
+const router = useRouter()
+
+const goDetail = (movieId) => {
+  console.log('영화 클릭됨! ID:', movieId)
+  router.push({ name: 'MovieDetail', params: { movieId: `${movieId}` } })
+}
 </script>
 
 <style scoped>
