@@ -1,18 +1,14 @@
 from django.shortcuts import render
-from django.shortcuts import get_list_or_404, get_object_or_404
-from .models import Movie,Comment
 from rest_framework import status
+from .models import Movie,Comment
+from django.shortcuts import get_list_or_404, get_object_or_404
 from .serializers.movies import MovieListSerializer,MovieSerializer
 from .serializers.comment import CommentSerializer,CommentUserSerializer
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes,authentication_classes
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view
+
 
 @api_view(['GET','POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def movie_list(request):
     if request.method == 'GET':
         movies = get_list_or_404(Movie, user=request.user)
@@ -33,15 +29,13 @@ def movie_list(request):
 
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def movie_detail(request,movie_pk):
     if request.method == 'GET':
         movie=get_object_or_404(Movie,pk=movie_pk)
         serializer=MovieSerializer(movie)
         return Response(serializer.data)
     
-    
+
 @api_view(['GET', 'POST'])
 def comment_list(request):
     if request.method == 'GET':
@@ -55,3 +49,11 @@ def comment_list(request):
             serializer.save(user=request.user)
             return Response(serializer.data, status=201)
         
+
+@api_view(['DELETE'])
+def comment_delete(request, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if comment.user != request.user:
+        return Response({'detail': '권한이 없습니다.'}, status=403)
+    comment.delete()
+    return Response({'detail': '삭제 성공!'}, status=204)

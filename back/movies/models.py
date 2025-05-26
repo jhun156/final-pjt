@@ -11,6 +11,7 @@ class Movie(models.Model):
     poster = models.TextField()
     release_date = models.TextField()
     runtime = models.IntegerField()
+    movie_num = models.IntegerField()
 
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

@@ -29,6 +29,12 @@
           >
             프로필
           </button>
+          <button
+            v-show="username === comment.username"
+            @click="goDelete(comment.id)"
+            style="color: white; background-color: red; border: none; padding: 0.375rem 0.75rem; border-radius: 0.25rem; cursor: pointer;"          >
+            삭제
+          </button>
         </div>
       </div>
     </div>
@@ -81,6 +87,25 @@ const submitComment = function () {
 
 const goOtherProfile = function (userId) {
   router.push({ name: 'otherprofile', params: { userid: userId } })
+}
+
+const goDelete = function(commentId) {
+  const token = localStorage.getItem('token')
+
+  axios({
+    method: 'delete',
+    url: `http://127.0.0.1:8000/movie/comments/${commentId}/`,
+    headers: {
+      Authorization: `Token ${token}`
+    }
+  })
+  .then(res => {
+    comments.value = comments.value.filter(comment => comment.id !== commentId)
+    window.alert('댓글이 삭제되었습니다.')
+  })
+  .catch(err => {
+    console.log('댓글 삭제 실패', err.response)
+  })
 }
 
 onMounted(() => {
