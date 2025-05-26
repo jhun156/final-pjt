@@ -1,21 +1,28 @@
 <template>
   <header class="sticky">
     <nav class="navbar">
-      <!-- 개선된 HOME 버튼 -->
+      <!-- HOME 버튼 -->
       <RouterLink :to="{ name: 'home' }" class="home-button">
         <i class="fas fa-home"></i>
         <span>HOME</span>
       </RouterLink>
 
-      <!-- 네비게이션 링크들 -->
-      <div class="nav-links">
-        <RouterLink :to="{ name: 'MovieList' }" class="nav-item">영화조회</RouterLink>
-        <RouterLink :to="{ name: 'ReviewSearch' }" class="nav-item">리뷰검색</RouterLink>
-        <RouterLink :to="{ name: 'Recommended' }" class="nav-item">영화추천</RouterLink>
-        <RouterLink :to="{ name: 'signup' }" class="nav-item" v-show="!store.isLogin">회원가입</RouterLink>
-        <RouterLink :to="{ name: 'login' }" class="nav-item" v-show="!store.isLogin">로그인</RouterLink>
-        <RouterLink :to="{ name: 'profile' }" class="nav-item" v-show="store.isLogin">프로필</RouterLink>
-        <a href="#" @click="onLogout" class="nav-item" v-show="store.isLogin">로그아웃</a>
+      <!-- 햄버거 버튼 -->
+      <button class="hamburger" @click="toggleMenu" aria-label="Toggle menu">
+        <span :class="{ open: menuOpen }"></span>
+        <span :class="{ open: menuOpen }"></span>
+        <span :class="{ open: menuOpen }"></span>
+      </button>
+
+      <!-- 네비게이션 링크 -->
+      <div :class="['nav-links', { open: menuOpen }]">
+        <RouterLink :to="{ name: 'MovieList' }" class="nav-item" @click="closeMenu">영화조회</RouterLink>
+        <RouterLink :to="{ name: 'ReviewSearch' }" class="nav-item" @click="closeMenu">리뷰검색</RouterLink>
+        <RouterLink :to="{ name: 'Recommended' }" class="nav-item" @click="closeMenu">영화추천</RouterLink>
+        <RouterLink :to="{ name: 'signup' }" class="nav-item" v-show="!store.isLogin" @click="closeMenu">회원가입</RouterLink>
+        <RouterLink :to="{ name: 'login' }" class="nav-item" v-show="!store.isLogin" @click="closeMenu">로그인</RouterLink>
+        <RouterLink :to="{ name: 'profile' }" class="nav-item" v-show="store.isLogin" @click="closeMenu">프로필</RouterLink>
+        <a href="#" @click.prevent="onLogout" class="nav-item" v-show="store.isLogin">로그아웃</a>
       </div>
     </nav>
   </header>
@@ -23,6 +30,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { useUserStore } from '@/stores/auth.js'
 import { useRouter } from 'vue-router'
@@ -31,10 +39,21 @@ import '@fortawesome/fontawesome-free/css/all.css'
 const store = useUserStore()
 const router = useRouter()
 
+const menuOpen = ref(false)
+
+const toggleMenu = () => {
+  menuOpen.value = !menuOpen.value
+}
+
+const closeMenu = () => {
+  menuOpen.value = false
+}
+
 const onLogout = () => {
   store.logout()
   alert('로그아웃되었습니다.')
   router.push({ name: 'home' })
+  closeMenu()
 }
 </script>
 
@@ -71,7 +90,7 @@ a {
   height: 60px;
 }
 
-/* ===== HOME 버튼 (리디자인) ===== */
+/* ===== HOME 버튼 ===== */
 .home-button {
   display: flex;
   align-items: center;
@@ -203,5 +222,87 @@ iframe {
   height: 390px;
   border: none;
   display: block;
+}
+
+/* ===== 햄버거 버튼 기본 숨김 ===== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10000;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+/* 햄버거 열림 상태 애니메이션 */
+.hamburger span.open:nth-child(1) {
+  transform: rotate(45deg);
+}
+
+.hamburger span.open:nth-child(2) {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.hamburger span.open:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+/* 작은 화면에서 햄버거 버튼 보이게 */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  /* 네비게이션 링크 감추기 기본 */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: #000000;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 200px;
+    padding: 1rem;
+    border-radius: 0 0 0 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  }
+
+  /* 메뉴 열렸을 때 보여줌 */
+  .nav-links.open {
+    display: flex;
+  }
+
+  /* 네비게이션 아이템 세로 정렬, 간격 */
+  .nav-item {
+    padding: 0.5rem 0;
+    font-weight: 600;
+  }
+}
+
+/* 큰 화면은 기존 flex row 유지 */
+@media (min-width: 769px) {
+  .nav-links {
+    display: flex !important;
+    position: static !important;
+    flex-direction: row !important;
+    width: auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
 }
 </style>

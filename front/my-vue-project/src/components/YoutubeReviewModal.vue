@@ -1,18 +1,19 @@
 <template>
   <div class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content" role="dialog" aria-modal="true">
-      <iframe
-        :src="`https://www.youtube.com/embed/${videoId}?autoplay=1`"
-        frameborder="0"
-        allow="autoplay; encrypted-media"
-        allowfullscreen
-      ></iframe>
       <div class="modal-side">
         <div class="modal-header">
           <h3 class="video-title">{{ videotitle }}</h3>
           <button class="close-btn" @click="closeModal" aria-label="Close">X</button>
         </div>
       </div>
+      <iframe
+        :src="`https://www.youtube.com/embed/${videoId}?autoplay=1`"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+      ></iframe>
+
     </div>
   </div>
 </template>
