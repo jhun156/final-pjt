@@ -28,6 +28,32 @@
 
     <h5 class="fw-semibold text-center mb-2">줄거리</h5>
     <p class="mb-4">{{ movie.overview }}</p>
+
+    <h5 v-show="casts.length > 0" class="fw-semibold text-center mb-2">감독 / 출연</h5>
+      <div v-if="director">
+        <img 
+          v-if="director.profile_path" 
+          :src="`https://image.tmdb.org/t/p/w185${director.profile_path}`" 
+          alt="감독 이미지"
+        >
+        <p>감독 Director</p>
+        <p>감독명 : {{ director.original_name }} / 한글 이름 : {{ director.name }}</p>
+      </div>
+    
+      <div v-if="casts.length > 0">
+        <ul>
+          <li v-for="cast in casts" :key="cast.cast_id">
+            <img 
+              v-if="cast.profile_path" 
+              :src="`https://image.tmdb.org/t/p/w185${cast.profile_path}`" 
+              alt="출연진 이미지"
+            >
+            <p>배역 : {{ cast.character }}</p>
+            <p>배우명 : {{ cast.original_name }} / 한글 이름 : {{ cast.name }}</p>
+          </li>
+        </ul>
+      </div>
+
     <h5 class="fw-semibold text-center mb-3">공식 예고편</h5>
     <div class="d-flex justify-content-center mb-3">
       <img 
@@ -55,20 +81,28 @@
 </template>
 
 <script setup>
-import { ref,onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import { useUserStore } from '@/stores/auth.js'
 import YoutubeTrailerModal from '../components/YoutubeTrailerModal.vue'
 import Comments from '@/components/Comments.vue'
 
-
 const is_like = ref(false)
-
 const isModalOpen = ref(false)
-
 const props = defineProps({
   movie: Object
 })
+
+const casts = computed(() => {
+  return (props.movie.credits?.cast || []).slice(0, 5)
+})
+
+const director = computed(() => {
+  return props.movie.credits?.crew?.find(person => person.job === 'Director') || null
+})
+
+console.log(casts)
+console.log(director)
 
 function openModal() {
   isModalOpen.value = true
@@ -157,7 +191,6 @@ onMounted(()=>{
 
 </script>
 
-
 <style scoped>
 .movie-detail {
   /* background-color: #121212; */
@@ -221,7 +254,6 @@ onMounted(()=>{
   transition: transform 0.2s ease, color 0.3s ease;
 }
 
-
 .like-icon:hover {
   transform: scale(1.2);
 }
@@ -239,6 +271,12 @@ onMounted(()=>{
 .like-pop-leave-to {
   transform: scale(0.6);
   opacity: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;  /* ← 왼쪽 들여쓰기도 없애고 싶다면 이거도!! */
+  margin: 0;
 }
 
 </style>

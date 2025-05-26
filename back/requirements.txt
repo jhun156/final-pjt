@@ -1,10 +1,10 @@
 asgiref==3.8.1
 axios==0.4.0
 certifi==2024.8.30
+cffi==1.17.1
 charset-normalizer==3.4.0
 click==8.1.7
 colorama==0.4.6
-cffi==1.17.1
 cryptography==43.0.3
 defusedxml==0.7.1
 dj-rest-auth==7.0.0
@@ -16,8 +16,9 @@ idna==3.10
 lxml==5.3.0
 markdown-it-py==3.0.0
 mdurl==0.1.2
-Pygments==2.18.0
+oauthlib==3.2.2
 pycparser==2.22
+Pygments==2.18.0
 PyJWT==2.9.0
 python3-openid==3.2.0
 requests==2.32.3
@@ -27,4 +28,3 @@ sqlparse==0.5.1
 typing_extensions==4.12.2
 tzdata==2024.2
 urllib3==2.2.3
-oauthlib==3.2.2
