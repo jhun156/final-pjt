@@ -51,9 +51,14 @@ const router = createRouter({
       component: () => import('@/views/OtherProfileView.vue')
     },
     {
-      path:'/update',
-      name:'update',
-      component:()=>import('@/views/updateProfile.vue')
+      path: '/update',
+      name: 'update',
+      component: () => import('@/views/updateProfile.vue')
+    },
+    {
+      path: '/secret',
+      name: 'secret',
+      component: () => import('@/views/SecretView.vue')
     }
   ],
 })
