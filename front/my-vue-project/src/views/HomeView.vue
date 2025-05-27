@@ -31,6 +31,15 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useProfileStore } from '@/stores/profile.js'
+import { onMounted } from 'vue'
+
+const profileStore = useProfileStore()
+
+onMounted(() => {
+  profileStore.userInfo()
+  profileStore.myFollowStatus()
+})
 </script>
 
 <style scoped>

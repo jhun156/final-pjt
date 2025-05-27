@@ -1,0 +1,238 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test1",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 21,
+      "nickname": "닉네임1",
+      "genre": "",
+      "followings": [
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test2",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 22,
+      "nickname": "닉네임2",
+      "genre": "",
+      "followings": [
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test3",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 23,
+      "nickname": "닉네임3",
+      "genre": "",
+      "followings": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test4",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 24,
+      "nickname": "닉네임4",
+      "genre": "",
+      "followings": [
+        5,
+        6
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test5",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 25,
+      "nickname": "닉네임5",
+      "genre": "",
+      "followings": [
+        6,
+        7
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test6",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 26,
+      "nickname": "닉네임6",
+      "genre": "",
+      "followings": [
+        7,
+        8
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test7",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 27,
+      "nickname": "닉네임7",
+      "genre": "",
+      "followings": [
+        8,
+        9
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test8",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 28,
+      "nickname": "닉네임8",
+      "genre": "",
+      "followings": [
+        9,
+        10
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test9",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 29,
+      "nickname": "닉네임9",
+      "genre": "",
+      "followings": [
+        10
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ii8fntwWoBB6rT4IYIvky6$lXTexb7rCnTXsYZD0XBPsB/X2D0/buE085tDlvRFiPI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "test10",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-05-27T00:00:00Z",
+      "gender": "SECRET",
+      "age": 30,
+      "nickname": "닉네임10",
+      "genre": "",
+      "followings": []
+    }
+  }
+]
