@@ -12,26 +12,28 @@ export const useUserStore = defineStore('user', () => {
   const router = useRouter()
   const username = ref('')
 
-  const deleteUser=function(){
-    axios({
-      method:'delete',
-      url:`${ACCOUNT_URL}/delete_or_change_user/`,
-      headers: {
-      Authorization: `Token ${token.value}`
+  const deleteUser = function() {
+    if (window.confirm('정말 회원탈퇴하시겠습니까?')) {
+      axios({
+        method: 'delete',
+        url: `${ACCOUNT_URL}/delete_or_change_user/`,
+        headers: {
+          Authorization: `Token ${token.value}`
+        }
+      })
+      .then(res => {
+        window.alert('회원탈퇴 완료')
+        router.push({ name: 'home' })
+        logout()
+      })
+      .catch(err => {
+        console.log(err)
+        console.log('토큰:', token.value)
+      })
+    } else {
+      router.push({ name: 'profile' })
     }
-    })
-    .then(res=>{
-      window.alert('회원탈퇴 완료')
-      router.push({name:'home'})
-      logout()
-    })
-    .catch(err=>{
-      console.log(err)
-      console.log('토큰:', token.value)
-    })
   }
-
-
 
   const signUp = function(payload){
 

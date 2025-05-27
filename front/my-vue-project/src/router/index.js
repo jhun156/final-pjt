@@ -63,11 +63,14 @@ export default router
 router.beforeEach((to, from) => {
   const store = useUserStore();
 
-  const publicPages = ['home', 'login', 'signup']; 
+  const publicPages = ['home', 'login', 'signup'];
 
   if (!store.isLogin && !publicPages.includes(to.name)) {
+    if (from.name === 'update') {
+      return { name: 'login' };
+    }
+
     window.alert('로그인이 필요합니다');
     return { name: 'login' };
   }
-
 });

@@ -14,8 +14,8 @@
           @click="toggleLike"
         ></div>
       </transition>
-
     </div>
+
     <h3 class="text-center mb-3">{{ movie.title }} 상세 페이지</h3>
     <p class="text-center mb-1"><strong>개봉일:</strong> {{ movie.release_date }}</p>
     <p class="text-center mb-1"><strong>러닝타임:</strong> {{ movie.runtime }}분</p>
@@ -30,22 +30,24 @@
     <p class="mb-4">{{ movie.overview }}</p>
 
     <div class="cast-wrapper">
-      <button class="arrow left" @click="scrollLeft">&#10094;</button>
-      <div class="cast-slider" ref="sliderRef">
+      <button class="arrow left" :class="{ 'disabled-arrow': isAtStart }" @click="scrollLeft" :disabled="isAtStart" :aria-disabled="isAtStart">◀</button>
+      <div class="cast-slider" ref="sliderRef" @scroll="onScroll">
         <div class="person-card" v-if="director">
           <img v-if="director.profile_path" :src="`https://image.tmdb.org/t/p/w185${director.profile_path}`" alt="감독 이미지">
+          <img v-if="!director.profile_path" src="@/assets/noposter.png" alt="no poster 이미지" class="noposter">
           <p><strong>감독</strong></p>
           <p>{{ director.original_name }}</p>
-          <p>{{ director.name }}</p>
+          <p v-if="director.original_name !== director.name">{{ director.name }}</p>
         </div>
         <div class="person-card" v-for="cast in casts" :key="cast.cast_id">
           <img v-if="cast.profile_path" :src="`https://image.tmdb.org/t/p/w185${cast.profile_path}`" alt="출연진 이미지">
+          <img v-if="!cast.profile_path" src="@/assets/noposter.png" alt="no poster 이미지" class="noposter">
           <p><strong>{{ cast.character }}</strong></p>
           <p>{{ cast.original_name }}</p>
-          <p>{{ cast.name }}</p>
+          <p v-if="cast.original_name !== cast.name">{{ cast.name }}</p>
         </div>
       </div>
-      <button class="arrow right" @click="scrollRight">&#10095;</button>
+      <button class="arrow right" @click="scrollRight" :class="{ 'disabled-arrow': isAtEnd }" :disabled="isAtEnd" :aria-disabled="isAtEnd">▶</button>
     </div>
 
     <h5 class="fw-semibold text-center mb-3">공식 예고편</h5>
@@ -71,7 +73,6 @@
       />
     </div>
   </div>
-
 </template>
 
 <script setup>
@@ -84,6 +85,9 @@ import Comments from '@/components/Comments.vue'
 const is_like = ref(false)
 const isModalOpen = ref(false)
 const sliderRef = ref(null)
+const isAtStart = ref(true) // 새로 추가됨
+const isAtEnd = ref(false) // 새로 추가됨
+
 const props = defineProps({
   movie: Object
 })
@@ -96,11 +100,23 @@ const director = computed(() => {
   return props.movie.credits?.crew?.find(person => person.job === 'Director') || null
 })
 
+// 좌우 스크롤 버튼 동작
 const scrollLeft = () => {
   sliderRef.value.scrollBy({ left: -200, behavior: 'smooth' })
 }
 const scrollRight = () => {
   sliderRef.value.scrollBy({ left: 200, behavior: 'smooth' })
+}
+
+// 스크롤 위치 체크 함수
+const checkScrollPosition = () => {
+  if (!sliderRef.value) return
+  isAtStart.value = sliderRef.value.scrollLeft <= 1
+  isAtEnd.value = sliderRef.value.scrollLeft + sliderRef.value.clientWidth >= sliderRef.value.scrollWidth - 1
+}
+
+const onScroll = () => {
+  checkScrollPosition()
 }
 
 function openModal() {
@@ -185,11 +201,12 @@ const onCheck = function () {
     console.log(err, is_like.value)
   })
 }
-onMounted(()=>{
+
+onMounted(() => {
   onCheck()
+  checkScrollPosition()
   console.log(props.movie.data)
 })
-
 </script>
 
 <style scoped>
@@ -204,7 +221,6 @@ onMounted(()=>{
   display: flex;
   justify-content: center;
   margin-bottom: 1.5rem;
-
   position: relative;
 }
 
@@ -236,17 +252,16 @@ onMounted(()=>{
   width: 150px;
   height: 150px;
   cursor: pointer;
-  /* filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.7)); */
 }
 
 .trailer-btn:hover {
   transform: scale(1.1);
 }
+
 .like-icon {
   position: absolute;
   top: 1rem;
   right: 1rem;
-
   font-size: 2.5rem;
   color: #e74c3c;
   cursor: pointer;
@@ -288,12 +303,13 @@ ul {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  gap: 1rem;
+  gap: 1.5rem; /* 간격 넓힘 */
   padding: 1rem;
   scroll-behavior: smooth;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .cast-slider::-webkit-scrollbar {
   display: none;
 }
@@ -308,10 +324,20 @@ ul {
   text-align: center;
   padding: 0.5rem;
 }
+
 .person-card img {
   width: 100%;
-  height: auto;
+  height: 205px;
   border-radius: 6px;
+  margin: 0 0.3rem; /* 좌우 여백 추가 */
+}
+
+.person-card p {
+  min-height: 3rem;
+  line-height: 1.5rem;
+  margin: 0.3rem 0;
+  overflow: hidden;
+  text-align: center;
 }
 
 .arrow {
@@ -319,23 +345,53 @@ ul {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  font-size: 2rem;
-  background-color: rgba(255,255,255,0.8);
+  font-size: 1.8rem;
+  background-color: transparent;
   border: none;
-  padding: 0.5rem 0.8rem;
   cursor: pointer;
+  color: #1E90FF;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 50%;
-  transition: background-color 0.2s ease;
+  transition: color 0.3s ease;
 }
-.arrow:hover {
-  background-color: rgba(200, 200, 200, 0.9);
+
+.arrow:disabled,
+.arrow[disabled],
+.arrow[aria-disabled="true"] {
+  color: #87CEFA;
+  cursor: not-allowed;
 }
+
+.arrow.disabled-arrow {
+  color: #87CEFA !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .arrow.left {
   left: -2.5rem;
 }
 .arrow.right {
   right: -2.5rem;
 }
+
+.circle {
+  font-size: 0.9rem;
+  line-height: 1;
+  color: #87CEFA;
+}
+
+.circle.filled {
+  color: #1E90FF;
+}
+
+.noposter {
+  width: 185px;
+  height: 240px;
+  margin: 0 0.3rem;
+}
 </style>
-
-

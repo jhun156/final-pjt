@@ -58,6 +58,11 @@ const onLogout = () => {
 </script>
 
 <style scoped>
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cinzel', 'DM Serif Display', serif;
+  letter-spacing: 0.5px;
+}
+
 html, body {
   margin: 0;
   padding: 0;

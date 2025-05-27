@@ -19,7 +19,7 @@
       >
         <div class="comment-header">
           <div class="comment-title">{{ comment.subtitle }}</div>
-          <div class="comment-user">작성자: {{ comment.username }}</div>
+          <div class="comment-user">작성자: {{ comment.nickname }}</div>
         </div>
         <div class="comment-content">{{ comment.content }}</div>
         <div class="comment-meta">
@@ -74,7 +74,8 @@ const submitComment = function () {
       movie: props.movie.title,
       subtitle: subtitle.value,
       content: content.value,
-      username: user.username
+      username: user.username,
+      nickname: user.nickname
     }
   })
     .then(res => {
