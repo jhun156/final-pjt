@@ -10,43 +10,44 @@ export const useMovieStore = defineStore('movie', () => {
   const selectedVideoTitle = ref('');
   const showModal = ref(false);
   const error = ref('');
+  const movieTitle=ref('')
 
   const youtubeApiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
 
   function fetchMovies(keyword) {
-  const API_KEY = youtubeApiKey; // 또는 const youtubeApiKey = ...
-  const url = 'https://www.googleapis.com/youtube/v3/search';
-
-  axios({
-    method: 'get',
-    url: url,
-    params: {
-      part: 'snippet',
-      maxResults: 28,
-      q: `${keyword} 리뷰`,
-      type: 'video',
-      key: API_KEY,
-    },
-  })
-    .then((response) => {
-      const items = response.data.items;
-      console.log(keyword)
-
-      if (!items || items.length === 0) {
-        error.value = '예고편을 찾을 수 없습니다.';
-        return;
-      }
-
-      recommendedMovies.value = items.map(item => ({
-        title: item.snippet.title,
-        videoId: item.id.videoId,
-        thumbnail: item.snippet.thumbnails.medium.url,
-      }));
+    const API_KEY = youtubeApiKey; // 또는 const youtubeApiKey = ...
+    const url = 'https://www.googleapis.com/youtube/v3/search';
+    movieTitle.value=keyword
+    axios({
+      method: 'get',
+      url: url,
+      params: {
+        part: 'snippet',
+        maxResults: 28,
+        q: `${keyword} 리뷰`,
+        type: 'video',
+        key: API_KEY,
+      },
     })
-    .catch((err) => {
-      error.value = `YouTube API 오류: ${err.message}`;
-    });
-}
+      .then((response) => {
+        const items = response.data.items;
+        console.log(keyword)
+
+        if (!items || items.length === 0) {
+          error.value = '예고편을 찾을 수 없습니다.';
+          return;
+        }
+
+        recommendedMovies.value = items.map(item => ({
+          title: item.snippet.title,
+          videoId: item.id.videoId,
+          thumbnail: item.snippet.thumbnails.medium.url,
+        }));
+      })
+      .catch((err) => {
+        error.value = `YouTube API 오류: ${err.message}`;
+      });
+  }
 
 
   function openModal(videoId, title) {
@@ -67,6 +68,7 @@ export const useMovieStore = defineStore('movie', () => {
     selectedVideoTitle,
     showModal,
     error,
+    movieTitle,
     fetchMovies,
     openModal,
     closeModal,

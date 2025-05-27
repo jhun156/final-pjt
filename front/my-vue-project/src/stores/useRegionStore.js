@@ -32,7 +32,7 @@ export const useRegionStore = defineStore('region', () => {
         error.value = '해당 지역을 찾을 수 없습니다.';
         return null;
       }
-
+      console.log(data)
       lat.value = data.documents[0].y;
       lon.value = data.documents[0].x;
       return { lat: lat.value, lon: lon.value };

@@ -10,7 +10,12 @@
     <p v-if="currentWeather" class="weather-text">📍 현재 날씨: <strong>{{ currentWeather }}</strong></p>
 
     <div v-if="recommendedMovies.length > 0">
-      <h2 class="subtitle">🎬 추천 영화 목록</h2>
+      <section class="movie-card">
+        <h3 class="movie-card__label">🎬 추천 영화</h3>
+        <h2 class="movie-card__title">{{ movieStore.movieTitle }}</h2>
+        <h3 class="movie-card__review-title">리뷰 리스트</h3>
+      </section>
+
       <div class="movie-grid">
         <div v-for="movie in recommendedMovies" :key="movie.videoId" class="movie-card" @click="openModal(movie.videoId, movie.title)">
           <img :src="movie.thumbnail" :alt="movie.title" />
@@ -129,12 +134,31 @@ function closeModal() {
   color: #555;
 }
 
-.subtitle {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: #333;
+.movie-card {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
+
+.movie-card__label {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.movie-card__title {
+  font-size: 1.2rem;
+  color: #272626;
+  margin-bottom: 1rem;
+}
+
+.movie-card__review-title {
+  font-size: 1.2rem;
+  color: #6c6d77;
+}
+
 
 .movie-grid {
   display: grid;
