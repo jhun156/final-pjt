@@ -1,10 +1,10 @@
 <template>
   <div class="comments-section">
     <form @submit.prevent="submitComment">
-      <label for="subtitle">소제목</label>
+      <label for="subtitle">댓글 제목</label>
       <input type="text" name="subtitle" id="subtitle" v-model="subtitle" />
 
-      <label for="content">댓글 작성</label>
+      <label for="content">댓글 내용</label>
       <textarea name="content" id="content" v-model="content" />
 
       <button type="submit">등록</button>

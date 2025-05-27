@@ -11,14 +11,14 @@ from rest_framework.decorators import api_view
 @api_view(['GET','POST'])
 def movie_list(request):
     if request.method == 'GET':
-        movies = get_list_or_404(Movie, user=request.user)
-        serializer = MovieListSerializer(movies, many=True)
+        movies = get_list_or_404(Movie, user = request.user)
+        serializer = MovieListSerializer(movies, many = True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
         user = request.user
         title = request.data.get('title')
-        if Movie.objects.filter(user=user, title=title).exists():
+        if Movie.objects.filter(user = user, title = title).exists():
             return Response({'message': '이미 저장된 영화입니다.'}, status=400)
         
         serializer = MovieSerializer(data=request.data)
@@ -29,10 +29,10 @@ def movie_list(request):
 
 
 @api_view(['GET'])
-def movie_detail(request,movie_pk):
+def movie_detail(request, movie_pk):
     if request.method == 'GET':
-        movie=get_object_or_404(Movie,pk=movie_pk)
-        serializer=MovieSerializer(movie)
+        movie = get_object_or_404(Movie, pk = movie_pk)
+        serializer = MovieSerializer(movie)
         return Response(serializer.data)
     
 
@@ -44,15 +44,15 @@ def comment_list(request):
         return Response(serializer.data, status=200)
     
     elif request.method == 'POST':
-        serializer = CommentUserSerializer(data=request.data)
+        serializer = CommentUserSerializer(data = request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user)
+            serializer.save(user = request.user)
             return Response(serializer.data, status=201)
         
 
 @api_view(['DELETE'])
 def comment_delete(request, comment_pk):
-    comment = get_object_or_404(Comment, pk=comment_pk)
+    comment = get_object_or_404(Comment, pk = comment_pk)
     if comment.user != request.user:
         return Response({'detail': '권한이 없습니다.'}, status=403)
     comment.delete()

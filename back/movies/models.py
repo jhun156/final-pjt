@@ -18,5 +18,5 @@ class Comment(models.Model):
     movie = models.CharField(max_length=20)
     subtitle = models.CharField(max_length=20)
     content = models.TextField()
-    username=models.CharField(max_length=50)
-    nickname=models.CharField(max_length=50)
+    username = models.CharField(max_length=50)
+    nickname = models.CharField(max_length=50)

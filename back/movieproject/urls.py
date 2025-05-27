@@ -18,10 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('accounts.urls')),
     path('admin/', admin.site.urls),
+    path('', include('accounts.urls')),
     path('movie/', include('movies.urls')),
     path('accounts/', include('dj_rest_auth.urls')),
-    path('accounts/signup/', include('dj_rest_auth.registration.urls')),
-    
+    path('accounts/signup/', include('dj_rest_auth.registration.urls')),  
 ]

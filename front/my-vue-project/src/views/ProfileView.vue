@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5">
-    <h1 class="text-center mb-4">나의 프로필 페이지</h1>
+    <h2 class="text-center mb-4">{{ user.nickname }}의 프로필 페이지</h2>
 
     <div class="user-info mx-auto mb-5">
       <p><strong>닉네임:</strong> {{ user.nickname }}</p>
@@ -21,14 +21,22 @@
         <button @click="userStore.deleteUser" class="delete-account-btn">회원탈퇴</button>
         <button @click="update" class="update-account-btn">회원정보 수정</button>
       </div>
-
     </div>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <h3 class="text-center mb-4">
+      <strong>{{ user.nickname }}님이 Pick한 영화들</strong>
+    </h3>
+    <br>
+
+    <div v-if="movies.length > 0" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
       <div v-for="movie in movies" :key="movie.id">
         <ProfileMovie :movie="movie" />
       </div>
     </div>
+
+    <h5 v-else class="text-center mb-4">
+      {{ user.nickname }}님이 Pick한 영화가 아직 없습니다.
+    </h5>
   </div>
 </template>
 
@@ -58,7 +66,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-h1 {
+h2, h3, h5 {
   color: #bdc6cf;
   font-weight: bold;
 }
