@@ -13,13 +13,20 @@
       <section class="movie-card">
         <h3 class="movie-card__label">🎬 추천 영화</h3>
         <h2 class="movie-card__title">{{ movieStore.movieTitle }}</h2>
-        <h3 class="movie-card__review-title">리뷰 리스트</h3>
+        <h3 class="movie-card__review-title">리뷰 및 줄거리</h3>
       </section>
 
       <div class="movie-grid">
-        <div v-for="movie in recommendedMovies" :key="movie.videoId" class="movie-card" @click="openModal(movie.videoId, movie.title)">
+        <div
+          v-for="movie in recommendedMovies"
+          :key="movie.videoId"
+          class="movie-card"
+          @click="openModal(movie.videoId, movie.title)"
+        >
           <img :src="movie.thumbnail" :alt="movie.title" />
           <p class="movie-title">{{ movie.title }}</p>
+          <!-- 여기서 movie.summary → movie.plot 으로 변경 -->
+          <p class="movie-summary">{{ movie.plot || '줄거리 불러오는 중...' }}</p>
         </div>
       </div>
     </div>
@@ -134,31 +141,14 @@ function closeModal() {
   color: #555;
 }
 
-.movie-card {
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border-radius: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.movie-card__label {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 1rem;
-}
-
-.movie-card__title {
-  font-size: 1.2rem;
-  color: #272626;
-  margin-bottom: 1rem;
-}
-
+.movie-card__label,
+.movie-card__title,
 .movie-card__review-title {
   font-size: 1.2rem;
-  color: #6c6d77;
+  margin-bottom: 1rem;
+  color: #444;
+  text-align: center;
 }
-
 
 .movie-grid {
   display: grid;
@@ -193,6 +183,16 @@ function closeModal() {
   font-weight: 600;
   font-size: 1rem;
   color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.movie-summary {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+  margin-top: 0.3rem;
+  word-break: keep-all;
+  white-space: normal;
 }
 
 .loading {
